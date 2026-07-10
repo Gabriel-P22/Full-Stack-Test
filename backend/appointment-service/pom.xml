@@ -8,7 +8,7 @@
 		<version>4.1.0</version>
 		<relativePath/> </parent>
 	<groupId>com.schedule.visit</groupId>
-	<artifactId>demo</artifactId>
+	<artifactId>appointment-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name/>
 	<description/>
