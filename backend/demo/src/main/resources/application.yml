@@ -3,7 +3,7 @@ spring:
     name: AppointmentApplication
 
   datasource:
-    url: jdbc:h2:mem:appointment
+    url: jdbc:h2:mem:appointment-db
     driverClassName: org.h2.Driver
     username: sa
     password:
