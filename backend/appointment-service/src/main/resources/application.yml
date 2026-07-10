@@ -28,6 +28,18 @@ spring:
         schema.registry.url: http://localhost:8081
         specific.avro.reader: true
 
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    operations-sorter: method
+    tags-sorter: alpha
+  paths-to-match: /api/**
+  packages-to-scan: com.appointment.adapters.in.controller
+
 response:
   error-messages:
     invalid-cpf: It's not possible create a appointment with invalid CPF. Try again
