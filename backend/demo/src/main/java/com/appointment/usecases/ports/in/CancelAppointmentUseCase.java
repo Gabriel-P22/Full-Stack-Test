@@ -1,4 +1,6 @@
 package com.appointment.usecases.ports.in;
 
-public interface CancelAppointmentUseCase {
+import com.appointment.entities.Appointment;
+
+public interface CancelAppointmentUseCase extends BaseUseCase<Appointment> {
 }

@@ -17,7 +17,7 @@ public class AppointmentEventProducerImpl implements AppointmentEventProducer {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void execute(final Appointment appointment) {
+    public Appointment execute(final Appointment appointment) {
         AppointmentAvroEvent avroEvent = AppointmentAvroEvent.newBuilder()
                 .setId(appointment.id())
                 .setPatientCpf(appointment.patientCpf())
@@ -31,5 +31,7 @@ public class AppointmentEventProducerImpl implements AppointmentEventProducer {
                 .build();
 
         kafkaTemplate.send("appointment-events-topic", appointment.id().toString(), avroEvent);
+
+        return appointment;
     }
 }

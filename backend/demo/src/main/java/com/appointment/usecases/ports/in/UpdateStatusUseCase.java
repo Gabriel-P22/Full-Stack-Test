@@ -1,4 +1,6 @@
 package com.appointment.usecases.ports.in;
 
-public interface UpdateStatusUseCase {
+import com.appointment.entities.Appointment;
+
+public interface UpdateStatusUseCase extends BaseUseCase<Appointment> {
 }
