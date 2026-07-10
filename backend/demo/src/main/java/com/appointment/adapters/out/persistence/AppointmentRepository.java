@@ -1,4 +1,11 @@
 package com.appointment.adapters.out.persistence;
 
-public interface AppointmentRepository {
+import com.appointment.adapters.out.persistence.entity.AppointmentEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.UUID;
+
+@Repository
+public interface AppointmentRepository extends JpaRepository<AppointmentEntity, UUID> {
 }

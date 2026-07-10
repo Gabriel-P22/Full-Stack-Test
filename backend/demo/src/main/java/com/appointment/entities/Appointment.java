@@ -1,6 +1,10 @@
 package com.appointment.entities;
 
 import com.appointment.enums.Status;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.br.CPF;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -12,12 +16,17 @@ import static com.appointment.enums.ErrorsMessages.TRY_CANCEL_APPOINTMENT_WITHOU
 
 public record Appointment(
         UUID id,
+        @NotBlank
+        @CPF(message = "${response.error-messages.invalid-cpf}")
         String patientCpf,
         String patientName,
+        @NotNull
+        @Future(message = "${response.error-messages.appointment-with-invalid-date}")
         LocalDateTime scheduledAt,
         Status status,
         Optional<String> observation,
-        LocalDateTime createdAt
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt
 ) {
 
     public Appointment updateStatus(Status status) throws Exception {
@@ -32,7 +41,8 @@ public record Appointment(
                 scheduledAt,
                 status,
                 observation,
-                createdAt
+                createdAt,
+                LocalDateTime.now()
         );
     }
 
@@ -51,8 +61,9 @@ public record Appointment(
                 patientName,
                 scheduledAt,
                 Status.CANCELED,
-                Optional.of(observation),
-                createdAt
+                Optional.ofNullable(observation),
+                createdAt,
+                updatedAt
         );
     }
 }

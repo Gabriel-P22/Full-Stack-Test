@@ -1,3 +1,7 @@
 spring:
   application:
     name: AppointmentApplication
+response:
+  error-messages:
+    invalid-cpf: It's not possible create a appointment with invalid CPF. Try again
+    appointment-with-invalid-date: It's not possible create a appointment with invalid date. Try again
