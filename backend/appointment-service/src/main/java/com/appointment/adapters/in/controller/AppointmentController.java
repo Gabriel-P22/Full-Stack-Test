@@ -24,7 +24,7 @@ public class AppointmentController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<AppointmentResponse>> create(
-            @RequestHeader(value = "Idempotency-Key", required = false) String idempotencyKey,
+            @RequestHeader("Idempotency-Key") String idempotencyKey,
             @Valid @RequestBody AppointmentRequest request
     ) {
         AppointmentResponse response = AppointmentResponse.fromModel(
