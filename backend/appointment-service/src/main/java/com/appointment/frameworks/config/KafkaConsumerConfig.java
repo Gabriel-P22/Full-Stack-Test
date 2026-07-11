@@ -18,13 +18,6 @@ public class KafkaConsumerConfig {
     private static final long RETRY_INTERVAL_MS = 1_000L;
     private static final long RETRY_MAX_ATTEMPTS = 2L;
 
-    /**
-     * Deserialization failures publish the raw undecoded bytes (Avro infers a "bytes" schema for
-     * them), while processing failures republish the typed AppointmentAvroEvent ("record" schema).
-     * Both can't share one DLT topic: Schema Registry rejects the second schema registered for the
-     * same subject once the first one is in place (BACKWARD compatibility), so a separate topic per
-     * failure kind avoids that conflict.
-     */
     @Bean
     public DeadLetterPublishingRecoverer deadLetterPublishingRecoverer(
             KafkaTemplate<String, AppointmentAvroEvent> kafkaTemplate) {
@@ -45,10 +38,6 @@ public class KafkaConsumerConfig {
         return false;
     }
 
-    /**
-     * Auto-detected by Spring Boot's ConcurrentKafkaListenerContainerFactoryConfigurer
-     * and applied to the default "kafkaListenerContainerFactory" bean.
-     */
     @Bean
     public CommonErrorHandler kafkaErrorHandler(DeadLetterPublishingRecoverer recoverer) {
         DefaultErrorHandler errorHandler = new DefaultErrorHandler(
