@@ -1,5 +1,6 @@
 package com.appointment.adapters.in.controller;
 
+import com.appointment.adapters.in.controller.dtos.ApiResponse;
 import com.appointment.adapters.in.controller.dtos.AppointmentRequest;
 import com.appointment.adapters.in.controller.dtos.AppointmentResponse;
 import com.appointment.usecases.ports.in.CreateAppointmentUseCase;
@@ -21,12 +22,12 @@ public class AppointmentController {
     }
 
     @PostMapping
-    public ResponseEntity<AppointmentResponse> create(@Valid @RequestBody AppointmentRequest request) throws Exception {
-        return ResponseEntity.ok().body(
-                AppointmentResponse.fromModel(
-                        createAppointmentUseCase.execute(request.toEntity())
-                )
+    public ResponseEntity<ApiResponse<AppointmentResponse>> create(@Valid @RequestBody AppointmentRequest request) {
+        AppointmentResponse response = AppointmentResponse.fromModel(
+                createAppointmentUseCase.execute(request.toEntity())
         );
+
+        return ResponseEntity.ok(ApiResponse.of(response, "Appointment created successfully"));
     }
 
 }

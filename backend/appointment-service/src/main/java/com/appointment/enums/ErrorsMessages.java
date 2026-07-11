@@ -12,6 +12,9 @@ public enum ErrorsMessages {
     ),
     TRY_CREATE_APPOINTMENT_WITHOUT_CPF(
             "It's not possible create a appointment with invalid CPF. Try again"
+    ),
+    APPOINTMENT_SLOT_UNAVAILABLE(
+            "There is already an appointment scheduled for this time. Please choose another time."
     );
 
     private final String message;
