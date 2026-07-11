@@ -39,7 +39,11 @@ public class AppointmentRepositoryPortImpl implements AppointmentRepositoryPort 
 
     @Override
     public AppointmentEntity update(AppointmentEntity entity) {
-        return repository.save(entity);
+        try {
+            return repository.save(entity);
+        } catch (DataIntegrityViolationException ex) {
+            throw new AppointmentConflictException(ErrorsMessages.APPOINTMENT_SLOT_UNAVAILABLE.getMessage());
+        }
     }
 
     @Override

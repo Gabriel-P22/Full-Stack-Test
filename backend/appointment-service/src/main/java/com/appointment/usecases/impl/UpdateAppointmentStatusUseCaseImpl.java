@@ -2,6 +2,8 @@ package com.appointment.usecases.impl;
 
 import com.appointment.adapters.out.persistence.entity.AppointmentEntity;
 import com.appointment.entities.Appointment;
+import com.appointment.entities.exceptions.AppointmentAlreadyCanceledException;
+import com.appointment.entities.exceptions.AppointmentCancellationObservationRequiredException;
 import com.appointment.enums.ErrorsMessages;
 import com.appointment.enums.Status;
 import com.appointment.frameworks.exceptions.AppointmentConflictException;
@@ -45,7 +47,7 @@ public class UpdateAppointmentStatusUseCaseImpl implements UpdateAppointmentStat
             return status == Status.CANCELED
                     ? appointment.cancel(observation)
                     : appointment.updateStatus(status);
-        } catch (Exception ex) {
+        } catch (AppointmentAlreadyCanceledException | AppointmentCancellationObservationRequiredException ex) {
             throw new AppointmentConflictException(ex.getMessage());
         }
     }
