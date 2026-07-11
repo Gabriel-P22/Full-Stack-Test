@@ -26,12 +26,12 @@ public class KafkaConsumerConfig {
         return new DeadLetterPublishingRecoverer(kafkaTemplate, this::resolveDeadLetterTopic);
     }
 
-    private TopicPartition resolveDeadLetterTopic(ConsumerRecord<?, ?> record, Exception exception) {
+    TopicPartition resolveDeadLetterTopic(ConsumerRecord<?, ?> record, Exception exception) {
         String suffix = isDeserializationFailure(exception) ? "-deserialization-dlt" : "-dlt";
         return new TopicPartition(record.topic() + suffix, -1);
     }
 
-    private boolean isDeserializationFailure(Throwable exception) {
+    boolean isDeserializationFailure(Throwable exception) {
         for (Throwable cause = exception; cause != null; cause = cause.getCause()) {
             if (cause instanceof DeserializationException) {
                 return true;
@@ -45,21 +45,26 @@ public class KafkaConsumerConfig {
             DeadLetterPublishingRecoverer deadLetterPublishingRecoverer,
             CancelAppointmentDueToProcessingFailureUseCase cancelAppointmentUseCase
     ) {
-        ConsumerRecordRecoverer recoverer = (record, exception) -> {
-            if (record.value() instanceof AppointmentAvroEvent event) {
-                cancelAppointmentUseCase.execute(event.getId());
-            }
-
-            deadLetterPublishingRecoverer.accept(record, exception);
-        };
-
         DefaultErrorHandler errorHandler = new DefaultErrorHandler(
-                recoverer,
+                recover(deadLetterPublishingRecoverer, cancelAppointmentUseCase),
                 new FixedBackOff(RETRY_INTERVAL_MS, RETRY_MAX_ATTEMPTS)
         );
 
         errorHandler.addNotRetryableExceptions(DeserializationException.class);
 
         return errorHandler;
+    }
+
+    ConsumerRecordRecoverer recover(
+            DeadLetterPublishingRecoverer deadLetterPublishingRecoverer,
+            CancelAppointmentDueToProcessingFailureUseCase cancelAppointmentUseCase
+    ) {
+        return (record, exception) -> {
+            if (record.value() instanceof AppointmentAvroEvent event) {
+                cancelAppointmentUseCase.execute(event.getId());
+            }
+
+            deadLetterPublishingRecoverer.accept(record, exception);
+        };
     }
 }
