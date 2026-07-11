@@ -10,10 +10,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EntityScan("com.appointment")
 @EnableJpaRepositories("com.appointment")
 @ConfigurationPropertiesScan("com.appointment")
-public class AppointmentApplication {
+public class AppointmentWorkerApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(AppointmentApplication.class, args);
+		SpringApplication.run(AppointmentWorkerApplication.class, args);
 	}
 
 }

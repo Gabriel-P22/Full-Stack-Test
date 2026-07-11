@@ -17,8 +17,11 @@ import org.springframework.util.backoff.FixedBackOff;
 @Configuration
 public class KafkaConsumerConfig {
 
-    private static final long RETRY_INTERVAL_MS = 1_000L;
-    private static final long RETRY_MAX_ATTEMPTS = 2L;
+    private final AppointmentKafkaProperties kafkaProperties;
+
+    public KafkaConsumerConfig(AppointmentKafkaProperties kafkaProperties) {
+        this.kafkaProperties = kafkaProperties;
+    }
 
     @Bean
     public DeadLetterPublishingRecoverer deadLetterPublishingRecoverer(
@@ -27,7 +30,9 @@ public class KafkaConsumerConfig {
     }
 
     TopicPartition resolveDeadLetterTopic(ConsumerRecord<?, ?> record, Exception exception) {
-        String suffix = isDeserializationFailure(exception) ? "-deserialization-dlt" : "-dlt";
+        String suffix = isDeserializationFailure(exception)
+                ? kafkaProperties.getDlt().getDeserializationSuffix()
+                : kafkaProperties.getDlt().getSuffix();
         return new TopicPartition(record.topic() + suffix, -1);
     }
 
@@ -47,7 +52,7 @@ public class KafkaConsumerConfig {
     ) {
         DefaultErrorHandler errorHandler = new DefaultErrorHandler(
                 recover(deadLetterPublishingRecoverer, cancelAppointmentUseCase),
-                new FixedBackOff(RETRY_INTERVAL_MS, RETRY_MAX_ATTEMPTS)
+                new FixedBackOff(kafkaProperties.getRetry().getBackoffIntervalMs(), kafkaProperties.getRetry().getMaxAttempts())
         );
 
         errorHandler.addNotRetryableExceptions(DeserializationException.class);

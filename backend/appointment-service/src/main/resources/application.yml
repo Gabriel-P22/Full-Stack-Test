@@ -28,15 +28,6 @@ spring:
       value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
       properties:
         schema.registry.url: http://localhost:8081
-    consumer:
-      group-id: appointment-group
-      key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
-      properties:
-        schema.registry.url: http://localhost:8081
-        specific.avro.reader: true
-        spring.deserializer.key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
-        spring.deserializer.value.delegate.class: io.confluent.kafka.serializers.KafkaAvroDeserializer
 
 logging:
   file:
@@ -61,3 +52,7 @@ response:
   error-messages:
     invalid-cpf: It's not possible create a appointment with invalid CPF. Try again
     appointment-with-invalid-date: It's not possible create a appointment with invalid date. Try again
+
+appointment:
+  kafka:
+    topic: appointment-events-topic
