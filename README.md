@@ -1,21 +1,21 @@
-# Full-Stack Test — Appointment Scheduling
+# Full-Stack Test — Agendamento de Consultas
 
-This project is structured as two top-level modules:
+Este projeto está estruturado em dois módulos de alto nível:
 
 ```
 .
-├── backend/    <- Spring Boot API + Kafka event processing (implemented)
-└── frontend/   <- not implemented yet
+├── backend/    <- API Spring Boot + processamento de eventos Kafka (implementado)
+└── frontend/   <- ainda não implementado
 ```
 
 ## Backend
 
-This is the **monolith** branch (`feat/finish`): the REST API, domain logic, Kafka producer and Kafka consumer all run as a single Spring Boot app under `backend/appointment-service`.
+Esta é a branch **monólito** (`main`): a API REST, a lógica de domínio, o produtor Kafka e o consumidor Kafka rodam juntos como uma única aplicação Spring Boot em `backend/appointment-service`.
 
-There's a sibling branch, **`feat/multi-module`**, with the exact same use cases split into independently deployable Maven modules (API vs. worker). Check out that branch for the modular version — it has its own README.
+Existe uma branch irmã, **`feat/multi-module`**, com os mesmos casos de uso divididos em módulos Maven implantáveis de forma independente (API vs. worker). Veja essa branch para a versão modular — ela tem seu próprio README.
 
-For how to run this branch (both a plain "infra in Docker, app local" mode and a fully-containerized mode), environment variables, and everything else, see **[`backend/appointment-service/README.md`](backend/appointment-service/README.md)**.
+Para saber como rodar esta branch (tanto no modo "infra no Docker, app local" quanto totalmente containerizado), variáveis de ambiente e tudo mais, veja **[`backend/appointment-service/README.md`](backend/appointment-service/README.md)**.
 
 ## Frontend
 
-Not implemented in this repository yet.
+Ainda não implementado neste repositório.
