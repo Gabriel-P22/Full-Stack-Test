@@ -1,0 +1,54 @@
+{
+  "type": "record",
+  "name": "AppointmentAvroEvent",
+  "namespace": "com.appointment.adapters.out.messaging.dto",
+  "fields": [
+    {
+      "name": "id",
+      "type": ["null", {"type": "string", "logicalType": "uuid"}],
+      "default": null
+    },
+    {
+      "name": "patientCpf",
+      "type": ["null", "string"],
+      "default": null
+    },
+    {
+      "name": "patientName",
+      "type": ["null", "string"],
+      "default": null
+    },
+    {
+      "name": "scheduledAt",
+      "type": ["null", {"type": "long", "logicalType": "timestamp-millis"}],
+      "default": null
+    },
+    {
+      "name": "status",
+      "type": [
+        "null",
+        {
+          "type": "enum",
+          "name": "AppointmentStatusAvro",
+          "symbols": ["PENDING", "SCHEDULED", "COMPLETED", "CANCELED"]
+        }
+      ],
+      "default": null
+    },
+    {
+      "name": "observation",
+      "type": ["null", "string"],
+      "default": null
+    },
+    {
+      "name": "createdAt",
+      "type": ["null", {"type": "long", "logicalType": "timestamp-millis"}],
+      "default": null
+    },
+    {
+      "name": "updatedAt",
+      "type": ["null", {"type": "long", "logicalType": "timestamp-millis"}],
+      "default": null
+    }
+  ]
+}

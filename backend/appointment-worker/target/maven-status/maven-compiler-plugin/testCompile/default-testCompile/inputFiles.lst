@@ -1,0 +1,4 @@
+/home/dev/Documents/WORK/PERSONAL/INTERVIEW/Full-Stack-Test/backend/appointment-worker/src/test/java/com/appointment/adapters/in/messaging/AppointmentEventConsumerTest.java
+/home/dev/Documents/WORK/PERSONAL/INTERVIEW/Full-Stack-Test/backend/appointment-worker/src/test/java/com/appointment/frameworks/config/KafkaConsumerConfigTest.java
+/home/dev/Documents/WORK/PERSONAL/INTERVIEW/Full-Stack-Test/backend/appointment-worker/src/test/java/com/appointment/usecases/impl/CancelAppointmentDueToProcessingFailureUseCaseImplTest.java
+/home/dev/Documents/WORK/PERSONAL/INTERVIEW/Full-Stack-Test/backend/appointment-worker/src/test/java/com/appointment/usecases/impl/ConfirmAppointmentUseCaseImplTest.java

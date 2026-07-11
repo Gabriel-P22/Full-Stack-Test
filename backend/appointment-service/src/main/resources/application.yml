@@ -61,3 +61,13 @@ response:
   error-messages:
     invalid-cpf: It's not possible create a appointment with invalid CPF. Try again
     appointment-with-invalid-date: It's not possible create a appointment with invalid date. Try again
+
+appointment:
+  kafka:
+    topic: appointment-events-topic
+    dlt:
+      suffix: -dlt
+      deserialization-suffix: -deserialization-dlt
+    retry:
+      backoff-interval-ms: 1000
+      max-attempts: 2
