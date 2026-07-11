@@ -48,6 +48,11 @@ public class AppointmentRepositoryPortImpl implements AppointmentRepositoryPort 
     }
 
     @Override
+    public boolean existsActiveAppointmentAtExcludingId(LocalDateTime scheduledAt, UUID id) {
+        return repository.existsByScheduledAtAndStatusNotAndIdNot(scheduledAt, Status.CANCELED, id);
+    }
+
+    @Override
     public Optional<AppointmentEntity> findByIdempotencyKey(String idempotencyKey) {
         return repository.findByIdempotencyKey(idempotencyKey);
     }

@@ -53,7 +53,7 @@ public record Appointment(
             throw new Exception(TRY_CANCEL_APPOINTMENT_ALREADY_CANCELED.getMessage());
         }
 
-        if (observation.isBlank()) {
+        if (observation == null || observation.isBlank()) {
             throw new Exception(TRY_CANCEL_APPOINTMENT_WITHOUT_OBSERVATION.getMessage());
         }
 

@@ -14,6 +14,7 @@ import java.util.UUID;
 @Repository
 public interface AppointmentRepository extends JpaRepository<AppointmentEntity, UUID> {
     boolean existsByScheduledAtAndStatusNot(LocalDateTime scheduledAt, Status status);
+    boolean existsByScheduledAtAndStatusNotAndIdNot(LocalDateTime scheduledAt, Status status, UUID id);
     Optional<AppointmentEntity> findByIdempotencyKey(String idempotencyKey);
     Page<AppointmentEntity> findByStatus(Status status, Pageable pageable);
 }
