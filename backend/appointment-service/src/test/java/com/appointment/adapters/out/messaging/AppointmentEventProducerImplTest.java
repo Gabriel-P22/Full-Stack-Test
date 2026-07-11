@@ -3,6 +3,8 @@ package com.appointment.adapters.out.messaging;
 import com.appointment.adapters.out.messaging.dto.AppointmentAvroEvent;
 import com.appointment.entities.Appointment;
 import com.appointment.enums.Status;
+import com.appointment.frameworks.config.AppointmentKafkaProperties;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -18,6 +20,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class AppointmentEventProducerImplTest {
@@ -25,8 +28,16 @@ class AppointmentEventProducerImplTest {
     @Mock
     private KafkaTemplate<String, AppointmentAvroEvent> kafkaTemplate;
 
+    @Mock
+    private AppointmentKafkaProperties kafkaProperties;
+
     @InjectMocks
     private AppointmentEventProducerImpl producer;
+
+    @BeforeEach
+    void setUp() {
+        when(kafkaProperties.getTopic()).thenReturn("appointment-events-topic");
+    }
 
     @Test
     void shouldPublishAvroEventAndReturnTheSameAppointment() {

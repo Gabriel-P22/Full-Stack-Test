@@ -23,7 +23,7 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 class KafkaConsumerConfigTest {
 
-    private final KafkaConsumerConfig config = new KafkaConsumerConfig();
+    private final KafkaConsumerConfig config = new KafkaConsumerConfig(new AppointmentKafkaProperties());
 
     @Mock
     private DeadLetterPublishingRecoverer deadLetterPublishingRecoverer;

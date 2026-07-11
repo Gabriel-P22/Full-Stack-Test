@@ -1,0 +1,5 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+appointment-worker,com.appointment.frameworks.config,KafkaConsumerConfig,0,102,0,8,0,22,0,11,0,7
+appointment-worker,com.appointment.adapters.in.messaging,AppointmentEventConsumer,0,46,0,0,0,9,0,3,0,3
+appointment-worker,com.appointment.usecases.impl,CancelAppointmentDueToProcessingFailureUseCaseImpl,0,56,0,4,0,19,0,5,0,3
+appointment-worker,com.appointment.usecases.impl,ConfirmAppointmentUseCaseImpl,9,82,0,6,2,19,0,7,0,4

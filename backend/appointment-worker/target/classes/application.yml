@@ -1,0 +1,51 @@
+spring:
+  application:
+    name: AppointmentWorkerApplication
+
+  datasource:
+    url: jdbc:h2:mem:appointment-db
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+      properties:
+        schema.registry.url: http://localhost:8081
+    consumer:
+      group-id: appointment-group
+      key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      properties:
+        schema.registry.url: http://localhost:8081
+        specific.avro.reader: true
+        spring.deserializer.key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
+        spring.deserializer.value.delegate.class: io.confluent.kafka.serializers.KafkaAvroDeserializer
+
+appointment:
+  kafka:
+    topic: appointment-events-topic
+    dlt:
+      suffix: -dlt
+      deserialization-suffix: -deserialization-dlt
+    retry:
+      backoff-interval-ms: 1000
+      max-attempts: 2
+
+logging:
+  file:
+    name: logs/appointment-worker.log
+  structured:
+    format:
+      file: ecs
