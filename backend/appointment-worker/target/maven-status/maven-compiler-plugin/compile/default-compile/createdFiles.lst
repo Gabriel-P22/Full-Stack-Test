@@ -1,7 +1,0 @@
-com/appointment/frameworks/config/KafkaConsumerConfig.class
-com/appointment/frameworks/spring/AppointmentWorkerApplication.class
-com/appointment/usecases/ports/in/ConfirmAppointmentUseCase.class
-com/appointment/usecases/impl/CancelAppointmentDueToProcessingFailureUseCaseImpl.class
-com/appointment/usecases/impl/ConfirmAppointmentUseCaseImpl.class
-com/appointment/usecases/ports/in/CancelAppointmentDueToProcessingFailureUseCase.class
-com/appointment/adapters/in/messaging/AppointmentEventConsumer.class

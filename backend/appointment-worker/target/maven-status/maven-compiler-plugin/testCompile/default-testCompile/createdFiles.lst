@@ -1,4 +1,0 @@
-com/appointment/adapters/in/messaging/AppointmentEventConsumerTest.class
-com/appointment/usecases/impl/ConfirmAppointmentUseCaseImplTest.class
-com/appointment/frameworks/config/KafkaConsumerConfigTest.class
-com/appointment/usecases/impl/CancelAppointmentDueToProcessingFailureUseCaseImplTest.class

@@ -12,7 +12,7 @@ on:
 
 defaults:
   run:
-    working-directory: backend
+    working-directory: backend/appointment-service
 
 permissions:
   contents: read
@@ -38,19 +38,16 @@ jobs:
           distribution: temurin
           java-version: '25'
           cache: maven
-          cache-dependency-path: backend/**/pom.xml
+          cache-dependency-path: backend/appointment-service/pom.xml
 
-      - name: Build application jars
+      - name: Build application jar
         run: ./mvnw -B clean package -DskipTests
 
-      - name: Build API Docker image
-        run: docker build -f appointment-service/Dockerfile -t appointment-service:${{ env.DEPLOY_SHA }} .
-
-      - name: Build worker Docker image
-        run: docker build -f appointment-worker/Dockerfile -t appointment-worker:${{ env.DEPLOY_SHA }} .
+      - name: Build Docker image
+        run: docker build -t appointment-service:${{ env.DEPLOY_SHA }} .
 
       - name: Deploy
         run: |
           echo "Deploy step placeholder — no real deployment is configured yet."
-          echo "Build artifacts and Docker images (appointment-service:${{ env.DEPLOY_SHA }}, appointment-worker:${{ env.DEPLOY_SHA }}) are ready."
+          echo "Build artifact and Docker image (appointment-service:${{ env.DEPLOY_SHA }}) are ready."
           echo "Pipeline finished successfully."
