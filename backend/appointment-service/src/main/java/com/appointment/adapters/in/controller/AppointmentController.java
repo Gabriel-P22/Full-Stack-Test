@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,9 +23,12 @@ public class AppointmentController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<AppointmentResponse>> create(@Valid @RequestBody AppointmentRequest request) {
+    public ResponseEntity<ApiResponse<AppointmentResponse>> create(
+            @RequestHeader(value = "Idempotency-Key", required = false) String idempotencyKey,
+            @Valid @RequestBody AppointmentRequest request
+    ) {
         AppointmentResponse response = AppointmentResponse.fromModel(
-                createAppointmentUseCase.execute(request.toEntity())
+                createAppointmentUseCase.execute(request.toEntity(idempotencyKey))
         );
 
         return ResponseEntity.ok(ApiResponse.of(response, "Appointment created successfully"));

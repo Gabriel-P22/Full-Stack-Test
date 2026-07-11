@@ -9,6 +9,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 public class AppointmentRepositoryPortImpl implements AppointmentRepositoryPort {
@@ -24,6 +25,11 @@ public class AppointmentRepositoryPortImpl implements AppointmentRepositoryPort 
         try {
             return repository.save(entity);
         } catch (DataIntegrityViolationException ex) {
+            if (entity.getIdempotencyKey() != null) {
+                return repository.findByIdempotencyKey(entity.getIdempotencyKey())
+                        .orElseThrow(() -> new AppointmentConflictException(ErrorsMessages.APPOINTMENT_SLOT_UNAVAILABLE.getMessage()));
+            }
+
             throw new AppointmentConflictException(ErrorsMessages.APPOINTMENT_SLOT_UNAVAILABLE.getMessage());
         }
     }
@@ -31,5 +37,10 @@ public class AppointmentRepositoryPortImpl implements AppointmentRepositoryPort 
     @Override
     public boolean existsActiveAppointmentAt(LocalDateTime scheduledAt) {
         return repository.existsByScheduledAtAndStatusNot(scheduledAt, Status.CANCELED);
+    }
+
+    @Override
+    public Optional<AppointmentEntity> findByIdempotencyKey(String idempotencyKey) {
+        return repository.findByIdempotencyKey(idempotencyKey);
     }
 }

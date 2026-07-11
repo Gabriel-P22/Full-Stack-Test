@@ -45,9 +45,12 @@ public class AppointmentEntity {
     @Column
     private LocalDateTime updatedAt;
 
+    @Column(name = "idempotency_key")
+    private String idempotencyKey;
+
     protected AppointmentEntity() {}
 
-    public AppointmentEntity(UUID id, String patientCpf, String patientName, LocalDateTime scheduledAt, Status status, String observation, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public AppointmentEntity(UUID id, String patientCpf, String patientName, LocalDateTime scheduledAt, Status status, String observation, LocalDateTime createdAt, LocalDateTime updatedAt, String idempotencyKey) {
         this.id = id;
         this.patientCpf = patientCpf;
         this.patientName = patientName;
@@ -56,8 +59,12 @@ public class AppointmentEntity {
         this.observation = observation;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.idempotencyKey = idempotencyKey;
     }
 
+    public String getIdempotencyKey() {
+        return idempotencyKey;
+    }
 
     public static AppointmentEntity fromDomain(final Appointment domainEntity) {
         return new AppointmentEntity(
@@ -68,7 +75,8 @@ public class AppointmentEntity {
                 domainEntity.status(),
                 domainEntity.observation().orElse(null),
                 domainEntity.createdAt(),
-                null
+                null,
+                domainEntity.idempotencyKey()
         );
     }
 
@@ -81,7 +89,8 @@ public class AppointmentEntity {
                 this.status,
                 Optional.ofNullable(this.observation),
                 this.createdAt,
-                this.updatedAt
+                this.updatedAt,
+                this.idempotencyKey
         );
     }
 
