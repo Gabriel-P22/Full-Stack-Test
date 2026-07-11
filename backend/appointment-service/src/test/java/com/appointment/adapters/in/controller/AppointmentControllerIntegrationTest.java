@@ -196,7 +196,7 @@ class AppointmentControllerIntegrationTest {
         mockMvc.perform(get("/api/v1/appointments"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.content.length()").value(3))
-                .andExpect(jsonPath("$.data.totalElements").value(3));
+                .andExpect(jsonPath("$.data.page.totalElements").value(3));
     }
 
     @Test
@@ -219,8 +219,8 @@ class AppointmentControllerIntegrationTest {
         mockMvc.perform(get("/api/v1/appointments").param("page", "0").param("size", "1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.content.length()").value(1))
-                .andExpect(jsonPath("$.data.totalElements").value(3))
-                .andExpect(jsonPath("$.data.totalPages").value(3));
+                .andExpect(jsonPath("$.data.page.totalElements").value(3))
+                .andExpect(jsonPath("$.data.page.totalPages").value(3));
     }
 
     @Test
@@ -230,7 +230,11 @@ class AppointmentControllerIntegrationTest {
         mockMvc.perform(get("/api/v1/appointments/{id}", pendingId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.id").value(pendingId.toString()))
-                .andExpect(jsonPath("$.data.status").value("PENDING"));
+                .andExpect(jsonPath("$.data.status").value("PENDING"))
+                .andExpect(jsonPath("$.data.links[?(@.rel=='self')]").exists())
+                .andExpect(jsonPath("$.data.links[?(@.rel=='appointments')]").exists())
+                .andExpect(jsonPath("$.data.links[?(@.rel=='confirm')]").exists())
+                .andExpect(jsonPath("$.data.links[?(@.rel=='cancel')]").exists());
     }
 
     @Test
@@ -247,7 +251,9 @@ class AppointmentControllerIntegrationTest {
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(new UpdateAppointmentStatusRequest(Status.CONFIRMED, null))))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.status").value("CONFIRMED"));
+                .andExpect(jsonPath("$.data.status").value("CONFIRMED"))
+                .andExpect(jsonPath("$.data.links[?(@.rel=='cancel')]").exists())
+                .andExpect(jsonPath("$.data.links[?(@.rel=='confirm')]").doesNotExist());
     }
 
     @Test
@@ -259,7 +265,9 @@ class AppointmentControllerIntegrationTest {
                         .content(objectMapper.writeValueAsString(new UpdateAppointmentStatusRequest(Status.CANCELED, "patient requested cancellation"))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.status").value("CANCELED"))
-                .andExpect(jsonPath("$.data.observation").value("patient requested cancellation"));
+                .andExpect(jsonPath("$.data.observation").value("patient requested cancellation"))
+                .andExpect(jsonPath("$.data.links[?(@.rel=='confirm')]").doesNotExist())
+                .andExpect(jsonPath("$.data.links[?(@.rel=='cancel')]").doesNotExist());
     }
 
     @Test
