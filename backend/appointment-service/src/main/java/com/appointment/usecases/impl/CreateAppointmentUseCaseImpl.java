@@ -3,7 +3,7 @@ package com.appointment.usecases.impl;
 import com.appointment.adapters.out.persistence.entity.AppointmentEntity;
 import com.appointment.entities.Appointment;
 import com.appointment.enums.ErrorsMessages;
-import com.appointment.usecases.exceptions.AppointmentConflictException;
+import com.appointment.frameworks.exceptions.AppointmentConflictException;
 import com.appointment.usecases.ports.in.CreateAppointmentUseCase;
 import com.appointment.usecases.ports.out.AppointmentEventProducer;
 import com.appointment.usecases.ports.out.AppointmentRepositoryPort;
