@@ -6,6 +6,8 @@ import com.appointment.enums.Status;
 import com.appointment.usecases.exceptions.AppointmentConflictException;
 import com.appointment.usecases.ports.out.AppointmentRepositoryPort;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -53,5 +55,10 @@ public class AppointmentRepositoryPortImpl implements AppointmentRepositoryPort 
     @Override
     public Optional<AppointmentEntity> findById(UUID id) {
         return repository.findById(id);
+    }
+
+    @Override
+    public Page<AppointmentEntity> findAll(Status status, Pageable pageable) {
+        return status != null ? repository.findByStatus(status, pageable) : repository.findAll(pageable);
     }
 }

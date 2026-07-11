@@ -18,6 +18,9 @@ public enum ErrorsMessages {
     ),
     APPOINTMENT_CANCELED_DUE_TO_PROCESSING_FAILURE(
             "There was an error on our end, so we have canceled your appointment. Please try again later."
+    ),
+    APPOINTMENT_NOT_FOUND(
+            "Appointment not found"
     );
 
     private final String message;

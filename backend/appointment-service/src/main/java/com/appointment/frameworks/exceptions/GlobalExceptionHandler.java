@@ -2,6 +2,7 @@ package com.appointment.frameworks.exceptions;
 
 import com.appointment.adapters.in.controller.dtos.ApiResponse;
 import com.appointment.usecases.exceptions.AppointmentConflictException;
+import com.appointment.usecases.exceptions.AppointmentNotFoundException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.slf4j.Logger;
@@ -51,6 +52,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<Void>> handleAppointmentConflict(AppointmentConflictException ex) {
         ApiResponse<Void> body = ApiResponse.of(null, ex.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(body);
+    }
+
+    @ExceptionHandler(AppointmentNotFoundException.class)
+    public ResponseEntity<ApiResponse<Void>> handleAppointmentNotFound(AppointmentNotFoundException ex) {
+        ApiResponse<Void> body = ApiResponse.of(null, ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
     }
 
     @ExceptionHandler(MissingRequestHeaderException.class)
