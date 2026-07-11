@@ -1,5 +1,7 @@
 package com.appointment.entities;
 
+import com.appointment.entities.exceptions.AppointmentAlreadyCanceledException;
+import com.appointment.entities.exceptions.AppointmentCancellationObservationRequiredException;
 import com.appointment.enums.Status;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
@@ -30,9 +32,9 @@ public record Appointment(
         String idempotencyKey
 ) {
 
-    public Appointment updateStatus(Status status) throws Exception {
+    public Appointment updateStatus(Status status) {
         if (this.status.equals(Status.CANCELED)) {
-            throw new Exception(TRY_CANCEL_APPOINTMENT_ALREADY_CANCELED.getMessage());
+            throw new AppointmentAlreadyCanceledException(TRY_CANCEL_APPOINTMENT_ALREADY_CANCELED.getMessage());
         }
 
         return new Appointment(
@@ -48,13 +50,13 @@ public record Appointment(
         );
     }
 
-    public Appointment cancel(String observation) throws Exception {
+    public Appointment cancel(String observation) {
         if (this.status.equals(Status.CANCELED)) {
-            throw new Exception(TRY_CANCEL_APPOINTMENT_ALREADY_CANCELED.getMessage());
+            throw new AppointmentAlreadyCanceledException(TRY_CANCEL_APPOINTMENT_ALREADY_CANCELED.getMessage());
         }
 
         if (observation == null || observation.isBlank()) {
-            throw new Exception(TRY_CANCEL_APPOINTMENT_WITHOUT_OBSERVATION.getMessage());
+            throw new AppointmentCancellationObservationRequiredException(TRY_CANCEL_APPOINTMENT_WITHOUT_OBSERVATION.getMessage());
         }
 
         return new Appointment(
