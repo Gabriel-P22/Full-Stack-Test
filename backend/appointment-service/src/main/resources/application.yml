@@ -38,6 +38,13 @@ spring:
         spring.deserializer.key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
         spring.deserializer.value.delegate.class: io.confluent.kafka.serializers.KafkaAvroDeserializer
 
+logging:
+  file:
+    name: logs/appointment-service.log
+  structured:
+    format:
+      file: ecs
+
 springdoc:
   api-docs:
     enabled: true

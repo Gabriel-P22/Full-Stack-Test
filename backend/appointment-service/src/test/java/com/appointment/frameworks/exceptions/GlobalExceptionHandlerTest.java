@@ -1,12 +1,22 @@
 package com.appointment.frameworks.exceptions;
 
 import com.appointment.adapters.in.controller.dtos.ApiResponse;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Path;
 import org.junit.jupiter.api.Test;
 import org.springframework.dao.QueryTimeoutException;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
+
+import java.util.Map;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class GlobalExceptionHandlerTest {
 
@@ -21,5 +31,37 @@ class GlobalExceptionHandlerTest {
         assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody().data()).isNull();
         assertThat(response.getBody().message()).isEqualTo("Database is currently unavailable. Please try again later.");
+    }
+
+    @Test
+    void shouldReturnBadRequestForConstraintViolation() {
+        Path path = mock(Path.class);
+        when(path.toString()).thenReturn("scheduledAt");
+        ConstraintViolation<?> violation = mock(ConstraintViolation.class);
+        when(violation.getPropertyPath()).thenReturn(path);
+        when(violation.getMessage()).thenReturn("must be in the future");
+
+        ResponseEntity<ApiResponse<Map<String, String>>> response =
+                handler.handleConstraintViolation(new ConstraintViolationException(Set.of(violation)));
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().data()).containsEntry("scheduledAt", "must be in the future");
+    }
+
+    @Test
+    void shouldReturnNotFoundForUnmappedStaticResource() {
+        ResponseEntity<Void> response = handler.handleNoResourceFound(new NoResourceFoundException(HttpMethod.GET, "/unknown", "/unknown"));
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+    }
+
+    @Test
+    void shouldReturnInternalServerErrorForUnexpectedException() {
+        ResponseEntity<ApiResponse<Void>> response = handler.handleUnexpected(new RuntimeException("boom"));
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().message()).isEqualTo("Unexpected error. Please try again later.");
     }
 }
