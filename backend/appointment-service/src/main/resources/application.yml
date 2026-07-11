@@ -13,6 +13,14 @@ spring:
       enabled: true
       path: /h2-console
 
+  jpa:
+    hibernate:
+      ddl-auto: validate
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
   kafka:
     bootstrap-servers: localhost:9092
     producer:

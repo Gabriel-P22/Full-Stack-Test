@@ -22,7 +22,7 @@ public record AppointmentRequest(
         @Future(message = "${response.error-messages.appointment-with-invalid-date}")
         LocalDateTime scheduledAt
 ) {
-        public Appointment toEntity() {
+        public Appointment toEntity(String idempotencyKey) {
                 return new Appointment(
                         null,
                         patientCpf,
@@ -31,7 +31,8 @@ public record AppointmentRequest(
                         Status.PENDING,
                         Optional.empty(),
                         LocalDateTime.now(),
-                        null
+                        null,
+                        idempotencyKey
                 );
         }
 }

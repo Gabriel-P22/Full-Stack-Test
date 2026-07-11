@@ -26,7 +26,8 @@ public record Appointment(
         Status status,
         Optional<String> observation,
         LocalDateTime createdAt,
-        LocalDateTime updatedAt
+        LocalDateTime updatedAt,
+        String idempotencyKey
 ) {
 
     public Appointment updateStatus(Status status) throws Exception {
@@ -42,7 +43,8 @@ public record Appointment(
                 status,
                 observation,
                 createdAt,
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                idempotencyKey
         );
     }
 
@@ -63,7 +65,8 @@ public record Appointment(
                 Status.CANCELED,
                 Optional.ofNullable(observation),
                 createdAt,
-                updatedAt
+                updatedAt,
+                idempotencyKey
         );
     }
 }
