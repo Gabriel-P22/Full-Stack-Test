@@ -75,7 +75,7 @@ public class AppointmentEntity {
                 domainEntity.status(),
                 domainEntity.observation().orElse(null),
                 domainEntity.createdAt(),
-                null,
+                domainEntity.updatedAt(),
                 domainEntity.idempotencyKey()
         );
     }

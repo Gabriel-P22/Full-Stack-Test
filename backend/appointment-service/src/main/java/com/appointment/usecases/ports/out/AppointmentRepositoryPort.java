@@ -5,9 +5,12 @@ import com.appointment.adapters.out.persistence.entity.AppointmentEntity;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface AppointmentRepositoryPort {
     AppointmentEntity create(AppointmentEntity appointment);
+    AppointmentEntity update(AppointmentEntity appointment);
     boolean existsActiveAppointmentAt(LocalDateTime scheduledAt);
     Optional<AppointmentEntity> findByIdempotencyKey(String idempotencyKey);
+    Optional<AppointmentEntity> findById(UUID id);
 }

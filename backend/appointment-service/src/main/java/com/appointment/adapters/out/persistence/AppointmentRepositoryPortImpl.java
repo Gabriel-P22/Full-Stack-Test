@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class AppointmentRepositoryPortImpl implements AppointmentRepositoryPort {
@@ -35,6 +36,11 @@ public class AppointmentRepositoryPortImpl implements AppointmentRepositoryPort 
     }
 
     @Override
+    public AppointmentEntity update(AppointmentEntity entity) {
+        return repository.save(entity);
+    }
+
+    @Override
     public boolean existsActiveAppointmentAt(LocalDateTime scheduledAt) {
         return repository.existsByScheduledAtAndStatusNot(scheduledAt, Status.CANCELED);
     }
@@ -42,5 +48,10 @@ public class AppointmentRepositoryPortImpl implements AppointmentRepositoryPort 
     @Override
     public Optional<AppointmentEntity> findByIdempotencyKey(String idempotencyKey) {
         return repository.findByIdempotencyKey(idempotencyKey);
+    }
+
+    @Override
+    public Optional<AppointmentEntity> findById(UUID id) {
+        return repository.findById(id);
     }
 }

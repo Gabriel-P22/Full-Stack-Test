@@ -1,12 +1,14 @@
 package com.appointment.frameworks.config;
 
 import com.appointment.adapters.out.messaging.dto.AppointmentAvroEvent;
+import com.appointment.usecases.ports.in.CancelAppointmentDueToProcessingFailureUseCase;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.TopicPartition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.listener.CommonErrorHandler;
+import org.springframework.kafka.listener.ConsumerRecordRecoverer;
 import org.springframework.kafka.listener.DeadLetterPublishingRecoverer;
 import org.springframework.kafka.listener.DefaultErrorHandler;
 import org.springframework.kafka.support.serializer.DeserializationException;
@@ -39,7 +41,18 @@ public class KafkaConsumerConfig {
     }
 
     @Bean
-    public CommonErrorHandler kafkaErrorHandler(DeadLetterPublishingRecoverer recoverer) {
+    public CommonErrorHandler kafkaErrorHandler(
+            DeadLetterPublishingRecoverer deadLetterPublishingRecoverer,
+            CancelAppointmentDueToProcessingFailureUseCase cancelAppointmentUseCase
+    ) {
+        ConsumerRecordRecoverer recoverer = (record, exception) -> {
+            if (record.value() instanceof AppointmentAvroEvent event) {
+                cancelAppointmentUseCase.execute(event.getId());
+            }
+
+            deadLetterPublishingRecoverer.accept(record, exception);
+        };
+
         DefaultErrorHandler errorHandler = new DefaultErrorHandler(
                 recoverer,
                 new FixedBackOff(RETRY_INTERVAL_MS, RETRY_MAX_ATTEMPTS)
