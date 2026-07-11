@@ -20,7 +20,8 @@ public class AppointmentEventConsumer {
     }
 
     @KafkaListener(
-            topics = "${appointment.kafka.topic:appointment-events-topic}",
+            topics = "appointment-events-topic",
+            groupId = "appointment-group",
             containerFactory = "kafkaListenerContainerFactory"
     )
     public void consume(ConsumerRecord<String, AppointmentAvroEvent> record) {

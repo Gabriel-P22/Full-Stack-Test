@@ -10,7 +10,7 @@ on:
 
 defaults:
   run:
-    working-directory: backend
+    working-directory: backend/appointment-service
 
 permissions:
   contents: read
@@ -30,7 +30,7 @@ jobs:
           distribution: temurin
           java-version: '25'
           cache: maven
-          cache-dependency-path: backend/**/pom.xml
+          cache-dependency-path: backend/appointment-service/pom.xml
 
       - name: Build, run tests and check coverage (90% minimum)
         run: ./mvnw -B verify
@@ -41,6 +41,6 @@ jobs:
         with:
           name: test-reports
           path: |
-            backend/*/target/surefire-reports
-            backend/*/target/site/jacoco
+            backend/appointment-service/target/surefire-reports
+            backend/appointment-service/target/site/jacoco
           retention-days: 7

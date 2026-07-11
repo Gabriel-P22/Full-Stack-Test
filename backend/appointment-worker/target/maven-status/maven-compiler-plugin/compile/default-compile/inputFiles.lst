@@ -1,7 +1,0 @@
-/home/dev/Documents/WORK/PERSONAL/INTERVIEW/Full-Stack-Test/backend/appointment-worker/src/main/java/com/appointment/adapters/in/messaging/AppointmentEventConsumer.java
-/home/dev/Documents/WORK/PERSONAL/INTERVIEW/Full-Stack-Test/backend/appointment-worker/src/main/java/com/appointment/frameworks/config/KafkaConsumerConfig.java
-/home/dev/Documents/WORK/PERSONAL/INTERVIEW/Full-Stack-Test/backend/appointment-worker/src/main/java/com/appointment/frameworks/spring/AppointmentWorkerApplication.java
-/home/dev/Documents/WORK/PERSONAL/INTERVIEW/Full-Stack-Test/backend/appointment-worker/src/main/java/com/appointment/usecases/impl/CancelAppointmentDueToProcessingFailureUseCaseImpl.java
-/home/dev/Documents/WORK/PERSONAL/INTERVIEW/Full-Stack-Test/backend/appointment-worker/src/main/java/com/appointment/usecases/impl/ConfirmAppointmentUseCaseImpl.java
-/home/dev/Documents/WORK/PERSONAL/INTERVIEW/Full-Stack-Test/backend/appointment-worker/src/main/java/com/appointment/usecases/ports/in/CancelAppointmentDueToProcessingFailureUseCase.java
-/home/dev/Documents/WORK/PERSONAL/INTERVIEW/Full-Stack-Test/backend/appointment-worker/src/main/java/com/appointment/usecases/ports/in/ConfirmAppointmentUseCase.java

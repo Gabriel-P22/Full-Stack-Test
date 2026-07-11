@@ -48,19 +48,3 @@ The application uses an in-memory H2 database. While the app is running, you can
 - `appointment-events-topic-deserialization-dlt` — messages that failed to deserialize (poison pills)
 
 Redpanda Console (Kafka UI): http://localhost:8090
-
-## Kafka configuration
-
-The topic name, dead-letter suffixes, and retry policy are bound from `application.yml` via a type-safe `@ConfigurationProperties(prefix = "appointment.kafka")` class (`AppointmentKafkaProperties`) instead of being hardcoded, so they can be overridden per environment without touching code:
-
-```yaml
-appointment:
-  kafka:
-    topic: appointment-events-topic
-    dlt:
-      suffix: -dlt
-      deserialization-suffix: -deserialization-dlt
-    retry:
-      backoff-interval-ms: 1000
-      max-attempts: 2
-```
