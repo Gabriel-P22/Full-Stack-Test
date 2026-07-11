@@ -1,6 +1,7 @@
 package com.appointment.adapters.in.controller;
 
 import com.appointment.adapters.in.controller.dtos.AppointmentRequest;
+import com.appointment.adapters.in.controller.dtos.UpdateAppointmentStatusRequest;
 import com.appointment.adapters.out.persistence.AppointmentRepository;
 import com.appointment.adapters.out.persistence.entity.AppointmentEntity;
 import com.appointment.entities.Appointment;
@@ -30,6 +31,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -235,5 +237,69 @@ class AppointmentControllerIntegrationTest {
     void shouldReturnNotFoundForUnknownId() throws Exception {
         mockMvc.perform(get("/api/v1/appointments/{id}", UUID.randomUUID()))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void shouldUpdateStatusFromPendingToConfirmed() throws Exception {
+        UUID id = persist(Status.PENDING, 1).id();
+
+        mockMvc.perform(patch("/api/v1/appointments/{id}/status", id)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(new UpdateAppointmentStatusRequest(Status.CONFIRMED, null))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.status").value("CONFIRMED"));
+    }
+
+    @Test
+    void shouldUpdateStatusToCanceledWithObservation() throws Exception {
+        UUID id = persist(Status.PENDING, 1).id();
+
+        mockMvc.perform(patch("/api/v1/appointments/{id}/status", id)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(new UpdateAppointmentStatusRequest(Status.CANCELED, "patient requested cancellation"))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.status").value("CANCELED"))
+                .andExpect(jsonPath("$.data.observation").value("patient requested cancellation"));
+    }
+
+    @Test
+    void shouldReturnConflictWhenCancelingWithoutObservation() throws Exception {
+        UUID id = persist(Status.PENDING, 1).id();
+
+        mockMvc.perform(patch("/api/v1/appointments/{id}/status", id)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(new UpdateAppointmentStatusRequest(Status.CANCELED, null))))
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    void shouldReturnConflictWhenUpdatingAlreadyCanceledAppointment() throws Exception {
+        UUID id = persist(Status.CANCELED, 1).id();
+
+        mockMvc.perform(patch("/api/v1/appointments/{id}/status", id)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(new UpdateAppointmentStatusRequest(Status.CONFIRMED, null))))
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    void shouldReturnNotFoundWhenUpdatingStatusOfUnknownId() throws Exception {
+        mockMvc.perform(patch("/api/v1/appointments/{id}/status", UUID.randomUUID())
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(new UpdateAppointmentStatusRequest(Status.CONFIRMED, null))))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void shouldRepublishToQueueWhenUpdatingStatusBackToPending() throws Exception {
+        UUID id = persist(Status.CONFIRMED, 1).id();
+
+        mockMvc.perform(patch("/api/v1/appointments/{id}/status", id)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(new UpdateAppointmentStatusRequest(Status.PENDING, null))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.status").value("PENDING"));
+
+        verify(producer).execute(any());
     }
 }

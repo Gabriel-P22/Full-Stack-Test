@@ -18,6 +18,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -76,5 +77,32 @@ class ConfirmAppointmentUseCaseImplTest {
         ArgumentCaptor<AppointmentEntity> captor = ArgumentCaptor.forClass(AppointmentEntity.class);
         verify(repository).update(captor.capture());
         assertThat(captor.getValue().toDomain().status()).isEqualTo(Status.CONFIRMED);
+    }
+
+    @Test
+    void shouldThrowWhenScheduleHasAlreadyPassed() {
+        UUID id = UUID.randomUUID();
+        AppointmentEntity entity = AppointmentEntity.fromDomain(new Appointment(
+                id, "52998224725", "John Doe", LocalDateTime.now().minusMinutes(1),
+                Status.PENDING, Optional.empty(), LocalDateTime.now(), null, null
+        ));
+        when(repository.findById(id)).thenReturn(Optional.of(entity));
+
+        assertThatThrownBy(() -> useCase.execute(id))
+                .isInstanceOf(IllegalStateException.class);
+
+        verify(repository, never()).update(any());
+    }
+
+    @Test
+    void shouldThrowWhenSlotIsNoLongerAvailable() {
+        UUID id = UUID.randomUUID();
+        when(repository.findById(id)).thenReturn(Optional.of(entityWithStatus(id, Status.PENDING)));
+        when(repository.existsActiveAppointmentAtExcludingId(any(), eq(id))).thenReturn(true);
+
+        assertThatThrownBy(() -> useCase.execute(id))
+                .isInstanceOf(IllegalStateException.class);
+
+        verify(repository, never()).update(any());
     }
 }

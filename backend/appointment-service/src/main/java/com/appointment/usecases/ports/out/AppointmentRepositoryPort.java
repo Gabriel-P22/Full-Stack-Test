@@ -14,6 +14,7 @@ public interface AppointmentRepositoryPort {
     AppointmentEntity create(AppointmentEntity appointment);
     AppointmentEntity update(AppointmentEntity appointment);
     boolean existsActiveAppointmentAt(LocalDateTime scheduledAt);
+    boolean existsActiveAppointmentAtExcludingId(LocalDateTime scheduledAt, UUID id);
     Optional<AppointmentEntity> findByIdempotencyKey(String idempotencyKey);
     Optional<AppointmentEntity> findById(UUID id);
     Page<AppointmentEntity> findAll(Status status, Pageable pageable);

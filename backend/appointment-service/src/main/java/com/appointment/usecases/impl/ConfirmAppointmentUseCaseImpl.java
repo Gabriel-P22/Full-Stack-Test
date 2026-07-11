@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Component
@@ -32,6 +33,14 @@ public class ConfirmAppointmentUseCaseImpl implements ConfirmAppointmentUseCase 
         if (domain.status() != Status.PENDING) {
             log.warn("Skipping confirmation for appointment {} already in status {}", appointmentId, domain.status());
             return;
+        }
+
+        if (!domain.scheduledAt().isAfter(LocalDateTime.now())) {
+            throw new IllegalStateException("Appointment " + appointmentId + " schedule has already passed");
+        }
+
+        if (repository.existsActiveAppointmentAtExcludingId(domain.scheduledAt(), appointmentId)) {
+            throw new IllegalStateException("Appointment " + appointmentId + " slot is no longer available");
         }
 
         Appointment confirmed;
