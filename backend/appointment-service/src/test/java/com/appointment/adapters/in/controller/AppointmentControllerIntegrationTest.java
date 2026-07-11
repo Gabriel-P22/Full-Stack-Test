@@ -2,27 +2,34 @@ package com.appointment.adapters.in.controller;
 
 import com.appointment.adapters.in.controller.dtos.AppointmentRequest;
 import com.appointment.adapters.out.persistence.AppointmentRepository;
+import com.appointment.adapters.out.persistence.entity.AppointmentEntity;
+import com.appointment.entities.Appointment;
+import com.appointment.enums.Status;
 import com.appointment.frameworks.spring.AppointmentApplication;
 import com.appointment.usecases.ports.out.AppointmentEventProducer;
+import com.appointment.usecases.ports.out.AppointmentRepositoryPort;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Optional;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -41,6 +48,9 @@ class AppointmentControllerIntegrationTest {
     @Autowired
     private AppointmentRepository appointmentRepository;
 
+    @Autowired
+    private AppointmentRepositoryPort appointmentRepositoryPort;
+
     @MockitoBean
     private AppointmentEventProducer producer;
 
@@ -57,6 +67,22 @@ class AppointmentControllerIntegrationTest {
 
     private LocalDateTime futureSlot(long offsetMinutes) {
         return LocalDateTime.now().plusDays(1).plusMinutes(offsetMinutes).truncatedTo(ChronoUnit.SECONDS);
+    }
+
+    private Appointment persist(Status status, long daySlotOffset) {
+        AppointmentEntity entity = AppointmentEntity.fromDomain(new Appointment(
+                null,
+                VALID_CPF,
+                "John Doe",
+                LocalDateTime.now().plusDays(daySlotOffset).truncatedTo(ChronoUnit.SECONDS),
+                status,
+                Optional.empty(),
+                LocalDateTime.now(),
+                null,
+                null
+        ));
+
+        return appointmentRepositoryPort.create(entity).toDomain();
     }
 
     @Test
@@ -157,5 +183,57 @@ class AppointmentControllerIntegrationTest {
                 .andExpect(status().isBadRequest());
 
         verify(producer, never()).execute(any());
+    }
+
+    @Test
+    void shouldListAllAppointmentsWithoutFilter() throws Exception {
+        persist(Status.PENDING, 1);
+        persist(Status.CONFIRMED, 2);
+        persist(Status.CANCELED, 3);
+
+        mockMvc.perform(get("/api/v1/appointments"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.content.length()").value(3))
+                .andExpect(jsonPath("$.data.totalElements").value(3));
+    }
+
+    @Test
+    void shouldListAppointmentsFilteredByStatus() throws Exception {
+        persist(Status.PENDING, 1);
+        persist(Status.CONFIRMED, 2);
+
+        mockMvc.perform(get("/api/v1/appointments").param("status", "PENDING"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.content.length()").value(1))
+                .andExpect(jsonPath("$.data.content[0].status").value("PENDING"));
+    }
+
+    @Test
+    void shouldRespectPagination() throws Exception {
+        persist(Status.PENDING, 1);
+        persist(Status.CONFIRMED, 2);
+        persist(Status.CANCELED, 3);
+
+        mockMvc.perform(get("/api/v1/appointments").param("page", "0").param("size", "1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.content.length()").value(1))
+                .andExpect(jsonPath("$.data.totalElements").value(3))
+                .andExpect(jsonPath("$.data.totalPages").value(3));
+    }
+
+    @Test
+    void shouldFindAppointmentById() throws Exception {
+        UUID pendingId = persist(Status.PENDING, 1).id();
+
+        mockMvc.perform(get("/api/v1/appointments/{id}", pendingId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.id").value(pendingId.toString()))
+                .andExpect(jsonPath("$.data.status").value("PENDING"));
+    }
+
+    @Test
+    void shouldReturnNotFoundForUnknownId() throws Exception {
+        mockMvc.perform(get("/api/v1/appointments/{id}", UUID.randomUUID()))
+                .andExpect(status().isNotFound());
     }
 }
