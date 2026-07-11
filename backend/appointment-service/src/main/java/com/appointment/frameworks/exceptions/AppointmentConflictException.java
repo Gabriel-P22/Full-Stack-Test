@@ -1,4 +1,4 @@
-package com.appointment.usecases.exceptions;
+package com.appointment.frameworks.exceptions;
 
 public class AppointmentConflictException extends RuntimeException {
     public AppointmentConflictException(String message) {

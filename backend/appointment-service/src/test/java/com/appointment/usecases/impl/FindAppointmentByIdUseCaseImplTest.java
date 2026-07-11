@@ -3,7 +3,7 @@ package com.appointment.usecases.impl;
 import com.appointment.adapters.out.persistence.entity.AppointmentEntity;
 import com.appointment.entities.Appointment;
 import com.appointment.enums.Status;
-import com.appointment.usecases.exceptions.AppointmentNotFoundException;
+import com.appointment.frameworks.exceptions.AppointmentNotFoundException;
 import com.appointment.usecases.ports.out.AppointmentRepositoryPort;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

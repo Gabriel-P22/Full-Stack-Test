@@ -1,8 +1,6 @@
 package com.appointment.frameworks.exceptions;
 
 import com.appointment.adapters.in.controller.dtos.ApiResponse;
-import com.appointment.usecases.exceptions.AppointmentConflictException;
-import com.appointment.usecases.exceptions.AppointmentNotFoundException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.slf4j.Logger;

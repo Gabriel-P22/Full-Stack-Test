@@ -1,4 +1,4 @@
-package com.appointment.usecases.exceptions;
+package com.appointment.frameworks.exceptions;
 
 public class AppointmentNotFoundException extends RuntimeException {
     public AppointmentNotFoundException(String message) {
