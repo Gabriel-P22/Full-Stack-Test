@@ -11,11 +11,6 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * Asserts directly on src/main/resources/application.yml rather than booting a Spring context,
- * since src/test/resources/application.yml shadows it entirely on the test classpath and a
- * SpringBootTest here would never see these values.
- */
 class ApplicationYamlConfigurationTest {
 
     private PropertySource<?> loadApplicationYml() throws IOException {

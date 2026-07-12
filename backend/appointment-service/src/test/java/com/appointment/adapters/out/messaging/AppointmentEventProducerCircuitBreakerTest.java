@@ -27,13 +27,6 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-/**
- * Exercises the real Resilience4j-backed circuit breaker around {@link AppointmentEventProducerImpl},
- * relying on Spring AOP proxying rather than a plain unit test, since the {@code @CircuitBreaker}
- * annotation only takes effect on a Spring-managed bean. The policy is set inline via
- * {@code properties} (mirroring application.yml) because src/test/resources/application.yml
- * shadows the main config entirely on the test classpath.
- */
 @SpringBootTest(classes = AppointmentApplication.class, properties = {
         "resilience4j.circuitbreaker.instances.appointmentEventProducer.sliding-window-type=COUNT_BASED",
         "resilience4j.circuitbreaker.instances.appointmentEventProducer.sliding-window-size=10",
