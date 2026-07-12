@@ -23,12 +23,6 @@ public class ValidationMessageConfig {
         return factoryBean;
     }
 
-    /**
-     * Bean Validation only interpolates "{key}" (ResourceBundle) or "${expr}" (unified EL) messages.
-     * The latter has no knowledge of Spring's Environment, so "${response.error-messages.x}" from
-     * application.yml is left untouched by the default interpolator. This resolves those placeholders
-     * against the Environment before delegating to the default interpolation.
-     */
     private static class PropertyPlaceholderMessageInterpolator implements MessageInterpolator {
 
         private static final Pattern PLACEHOLDER = Pattern.compile("\\$\\{([^}]+)}");

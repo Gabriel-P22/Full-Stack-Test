@@ -6,11 +6,6 @@ import org.springframework.data.domain.Sort;
 
 import java.util.Set;
 
-/**
- * Falls back to the default sort when a requested sort property isn't a real field (e.g. Swagger
- * UI's unedited "string" placeholder for the sort array), instead of letting an invalid Sort
- * expression blow up the query.
- */
 final class AppointmentSortSanitizer {
 
     private static final Set<String> SORTABLE_PROPERTIES =
