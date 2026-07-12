@@ -34,6 +34,17 @@ class GlobalExceptionHandlerTest {
     }
 
     @Test
+    void shouldReturnServiceUnavailableForAppointmentEventPublishingException() {
+        ResponseEntity<ApiResponse<Void>> response = handler.handleAppointmentEventPublishing(
+                new AppointmentEventPublishingException("boom", new RuntimeException("kafka down")));
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.SERVICE_UNAVAILABLE);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().data()).isNull();
+        assertThat(response.getBody().message()).isEqualTo("Messaging service is currently unavailable. Please try again later.");
+    }
+
+    @Test
     void shouldReturnBadRequestForConstraintViolation() {
         Path path = mock(Path.class);
         when(path.toString()).thenReturn("scheduledAt");

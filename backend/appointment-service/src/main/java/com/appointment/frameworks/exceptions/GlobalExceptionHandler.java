@@ -78,6 +78,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(body);
     }
 
+    @ExceptionHandler(AppointmentEventPublishingException.class)
+    public ResponseEntity<ApiResponse<Void>> handleAppointmentEventPublishing(AppointmentEventPublishingException ex) {
+        log.error("Appointment event publishing error", ex);
+
+        ApiResponse<Void> body = ApiResponse.of(null, "Messaging service is currently unavailable. Please try again later.");
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(body);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Void>> handleUnexpected(Exception ex) {
         log.error("Unexpected error", ex);
