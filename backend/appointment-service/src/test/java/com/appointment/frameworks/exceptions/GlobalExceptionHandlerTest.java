@@ -5,14 +5,19 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Path;
 import org.junit.jupiter.api.Test;
+import org.springframework.core.MethodParameter;
 import org.springframework.dao.QueryTimeoutException;
+import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -58,6 +63,34 @@ class GlobalExceptionHandlerTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody().data()).containsEntry("scheduledAt", "must be in the future");
+    }
+
+    @Test
+    void shouldReturnBadRequestForMethodArgumentTypeMismatch() {
+        MethodParameter parameter = mock(MethodParameter.class);
+        MethodArgumentTypeMismatchException ex =
+                new MethodArgumentTypeMismatchException("string", UUID.class, "id", parameter, null);
+
+        ResponseEntity<ApiResponse<Void>> response = handler.handleMethodArgumentTypeMismatch(ex);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().data()).isNull();
+        assertThat(response.getBody().message()).isEqualTo("Invalid value for parameter: id");
+    }
+
+    @Test
+    void shouldReturnBadRequestForHttpMessageNotReadable() {
+        HttpInputMessage inputMessage = mock(HttpInputMessage.class);
+        HttpMessageNotReadableException ex =
+                new HttpMessageNotReadableException("Cannot deserialize value of type `Status`", inputMessage);
+
+        ResponseEntity<ApiResponse<Void>> response = handler.handleHttpMessageNotReadable(ex);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().data()).isNull();
+        assertThat(response.getBody().message()).isEqualTo("Malformed or invalid request body.");
     }
 
     @Test
