@@ -87,11 +87,6 @@ public class AppointmentController {
         return ResponseEntity.ok(ApiResponse.of(pagedModel, "Appointments retrieved successfully"));
     }
 
-    /**
-     * Falls back to the default sort when a sort property isn't a real field (e.g. Swagger UI's
-     * unedited "string" placeholder for the sort array), instead of letting an invalid Sort
-     * expression blow up the query.
-     */
     private Pageable sanitizeSort(Pageable pageable) {
         Sort validOrders = Sort.by(pageable.getSort().stream()
                 .filter(order -> SORTABLE_PROPERTIES.contains(order.getProperty()))
@@ -115,7 +110,7 @@ public class AppointmentController {
             @PathVariable UUID id,
             @Valid @RequestBody UpdateAppointmentStatusRequest request
     ) {
-        Appointment updated = updateAppointmentStatusUseCase.execute(id, request.status(), request.observation());
+        Appointment updated = updateAppointmentStatusUseCase.execute(id, request.toStatus(), request.observation());
 
         return ResponseEntity.ok(ApiResponse.of(appointmentModelAssembler.toModel(updated), "Appointment status updated successfully"));
     }
