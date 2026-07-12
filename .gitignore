@@ -4,3 +4,4 @@
 ### Logs ###
 backend/**/logs/*
 !backend/**/logs/.gitkeep
+.idea
