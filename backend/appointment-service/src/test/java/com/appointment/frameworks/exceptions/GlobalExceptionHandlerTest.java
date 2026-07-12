@@ -5,14 +5,18 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Path;
 import org.junit.jupiter.api.Test;
+import org.springframework.core.MethodParameter;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.dao.QueryTimeoutException;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -31,6 +35,17 @@ class GlobalExceptionHandlerTest {
         assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody().data()).isNull();
         assertThat(response.getBody().message()).isEqualTo("Database is currently unavailable. Please try again later.");
+    }
+
+    @Test
+    void shouldReturnBadRequestForInvalidDataAccessApiUsageException() {
+        ResponseEntity<ApiResponse<Void>> response = handler.handleInvalidDataAccessApiUsage(
+                new InvalidDataAccessApiUsageException("invalid sort expression"));
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().data()).isNull();
+        assertThat(response.getBody().message()).isEqualTo("Invalid request parameters.");
     }
 
     @Test
@@ -58,6 +73,20 @@ class GlobalExceptionHandlerTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody().data()).containsEntry("scheduledAt", "must be in the future");
+    }
+
+    @Test
+    void shouldReturnBadRequestForMethodArgumentTypeMismatch() {
+        MethodParameter parameter = mock(MethodParameter.class);
+        MethodArgumentTypeMismatchException ex =
+                new MethodArgumentTypeMismatchException("string", UUID.class, "id", parameter, null);
+
+        ResponseEntity<ApiResponse<Void>> response = handler.handleMethodArgumentTypeMismatch(ex);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().data()).isNull();
+        assertThat(response.getBody().message()).isEqualTo("Invalid value for parameter: id");
     }
 
     @Test

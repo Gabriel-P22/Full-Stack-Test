@@ -10,9 +10,12 @@ import com.appointment.usecases.ports.in.CreateAppointmentUseCase;
 import com.appointment.usecases.ports.in.FindAppointmentByIdUseCase;
 import com.appointment.usecases.ports.in.ListAppointmentsUseCase;
 import com.appointment.usecases.ports.in.UpdateAppointmentStatusUseCase;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
@@ -28,11 +31,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Set;
 import java.util.UUID;
 
 @RestController()
 @RequestMapping("/api/v1")
 public class AppointmentController {
+
+    private static final Set<String> SORTABLE_PROPERTIES =
+            Set.of("scheduledAt", "status", "patientName", "createdAt", "updatedAt");
 
     private final CreateAppointmentUseCase createAppointmentUseCase;
     private final ListAppointmentsUseCase listAppointmentsUseCase;
@@ -59,6 +66,7 @@ public class AppointmentController {
 
     @PostMapping("/appointment")
     public ResponseEntity<ApiResponse<EntityModel<AppointmentResponse>>> create(
+            @Parameter(example = "11111111-1111-1111-1111-111111111111")
             @RequestHeader("Idempotency-Key") String idempotencyKey,
             @Valid @RequestBody AppointmentRequest request
     ) {
@@ -72,11 +80,27 @@ public class AppointmentController {
             @RequestParam(required = false) Status status,
             @PageableDefault(size = 10, sort = "scheduledAt") Pageable pageable
     ) {
-        Page<Appointment> page = listAppointmentsUseCase.execute(status, pageable);
+        Page<Appointment> page = listAppointmentsUseCase.execute(status, sanitizeSort(pageable));
         PagedModel<EntityModel<AppointmentResponse>> pagedModel =
                 pagedResourcesAssembler.toModel(page, appointmentModelAssembler::toModel);
 
         return ResponseEntity.ok(ApiResponse.of(pagedModel, "Appointments retrieved successfully"));
+    }
+
+    /**
+     * Falls back to the default sort when a sort property isn't a real field (e.g. Swagger UI's
+     * unedited "string" placeholder for the sort array), instead of letting an invalid Sort
+     * expression blow up the query.
+     */
+    private Pageable sanitizeSort(Pageable pageable) {
+        Sort validOrders = Sort.by(pageable.getSort().stream()
+                .filter(order -> SORTABLE_PROPERTIES.contains(order.getProperty()))
+                .toList());
+
+        Sort sort = validOrders.isSorted() ? validOrders : Sort.by(Sort.Direction.ASC, "scheduledAt");
+        return pageable.getSort().equals(sort)
+                ? pageable
+                : PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
     }
 
     @GetMapping("/appointments/{id}")
