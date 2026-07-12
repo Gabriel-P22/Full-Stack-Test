@@ -13,9 +13,7 @@ import com.appointment.usecases.ports.in.UpdateAppointmentStatusUseCase;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
@@ -31,15 +29,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Set;
 import java.util.UUID;
 
 @RestController()
 @RequestMapping("/api/v1")
 public class AppointmentController {
-
-    private static final Set<String> SORTABLE_PROPERTIES =
-            Set.of("scheduledAt", "status", "patientName", "createdAt", "updatedAt");
 
     private final CreateAppointmentUseCase createAppointmentUseCase;
     private final ListAppointmentsUseCase listAppointmentsUseCase;
@@ -80,22 +74,11 @@ public class AppointmentController {
             @RequestParam(required = false) Status status,
             @PageableDefault(size = 10, sort = "scheduledAt") Pageable pageable
     ) {
-        Page<Appointment> page = listAppointmentsUseCase.execute(status, sanitizeSort(pageable));
+        Page<Appointment> page = listAppointmentsUseCase.execute(status, AppointmentSortSanitizer.sanitize(pageable));
         PagedModel<EntityModel<AppointmentResponse>> pagedModel =
                 pagedResourcesAssembler.toModel(page, appointmentModelAssembler::toModel);
 
         return ResponseEntity.ok(ApiResponse.of(pagedModel, "Appointments retrieved successfully"));
-    }
-
-    private Pageable sanitizeSort(Pageable pageable) {
-        Sort validOrders = Sort.by(pageable.getSort().stream()
-                .filter(order -> SORTABLE_PROPERTIES.contains(order.getProperty()))
-                .toList());
-
-        Sort sort = validOrders.isSorted() ? validOrders : Sort.by(Sort.Direction.ASC, "scheduledAt");
-        return pageable.getSort().equals(sort)
-                ? pageable
-                : PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
     }
 
     @GetMapping("/appointments/{id}")

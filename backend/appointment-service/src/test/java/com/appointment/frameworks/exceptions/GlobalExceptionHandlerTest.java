@@ -6,7 +6,6 @@ import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Path;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.MethodParameter;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.dao.QueryTimeoutException;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpMethod;
@@ -37,17 +36,6 @@ class GlobalExceptionHandlerTest {
         assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody().data()).isNull();
         assertThat(response.getBody().message()).isEqualTo("Database is currently unavailable. Please try again later.");
-    }
-
-    @Test
-    void shouldReturnBadRequestForInvalidDataAccessApiUsageException() {
-        ResponseEntity<ApiResponse<Void>> response = handler.handleInvalidDataAccessApiUsage(
-                new InvalidDataAccessApiUsageException("invalid sort expression"));
-
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-        assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody().data()).isNull();
-        assertThat(response.getBody().message()).isEqualTo("Invalid request parameters.");
     }
 
     @Test
