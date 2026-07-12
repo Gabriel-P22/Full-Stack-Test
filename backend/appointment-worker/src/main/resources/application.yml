@@ -3,10 +3,19 @@ spring:
     name: AppointmentWorkerApplication
 
   datasource:
-    url: jdbc:h2:mem:appointment-db
+    url: jdbc:h2:file:../data/appointment-db;AUTO_SERVER=TRUE
     driverClassName: org.h2.Driver
     username: sa
     password:
+    hikari:
+      pool-name: AppointmentWorkerHikariPool
+      maximum-pool-size: 5
+      minimum-idle: 2
+      connection-timeout: 3000
+      idle-timeout: 300000
+      max-lifetime: 900000
+      validation-timeout: 2000
+      leak-detection-threshold: 30000
 
   jpa:
     hibernate:
