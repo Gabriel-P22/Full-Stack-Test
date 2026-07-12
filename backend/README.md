@@ -37,9 +37,7 @@ Sistema de agendamento de consultas, em arquitetura hexagonal, dividido em três
    ./mvnw -pl appointment-worker spring-boot:run
    ```
 
-A API fica disponível em `http://localhost:8080`.
-
-> Se algum dos containers de infra for reiniciado, `appointment-service` e `appointment-worker` reconectam sozinhos ao Kafka — não é necessário reiniciá-los junto.
+A API fica disponível em `http://localhost:8080`. Se algum dos containers de infra for reiniciado, `appointment-service` e `appointment-worker` reconectam sozinhos ao Kafka — não é necessário reiniciá-los junto.
 
 ## API
 
@@ -73,7 +71,7 @@ O arquivo fica em `backend/data/appointment-db.mv.db` (ignorado no git). Pra res
    - **Password**: *(vazio)*
 3. Clique em **Connect**.
 
-> O `;AUTO_SERVER=TRUE` é obrigatório — sem ele, o H2 tenta abrir o arquivo em modo exclusivo e dá erro `Database may be already in use`, porque o `appointment-service` já está com ele aberto.
+O `;AUTO_SERVER=TRUE` é obrigatório — sem ele, o H2 tenta abrir o arquivo em modo exclusivo e dá erro `Database may be already in use`, porque o `appointment-service` já está com ele aberto.
 
 Schema gerenciado por Flyway (`appointment-service/src/main/resources/db/migration`).
 
