@@ -10,6 +10,7 @@ import com.appointment.usecases.ports.in.CreateAppointmentUseCase;
 import com.appointment.usecases.ports.in.FindAppointmentByIdUseCase;
 import com.appointment.usecases.ports.in.ListAppointmentsUseCase;
 import com.appointment.usecases.ports.in.UpdateAppointmentStatusUseCase;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -59,6 +60,7 @@ public class AppointmentController {
 
     @PostMapping("/appointment")
     public ResponseEntity<ApiResponse<EntityModel<AppointmentResponse>>> create(
+            @Parameter(example = "11111111-1111-1111-1111-111111111111")
             @RequestHeader("Idempotency-Key") String idempotencyKey,
             @Valid @RequestBody AppointmentRequest request
     ) {
@@ -72,7 +74,7 @@ public class AppointmentController {
             @RequestParam(required = false) Status status,
             @PageableDefault(size = 10, sort = "scheduledAt") Pageable pageable
     ) {
-        Page<Appointment> page = listAppointmentsUseCase.execute(status, pageable);
+        Page<Appointment> page = listAppointmentsUseCase.execute(status, AppointmentSortSanitizer.sanitize(pageable));
         PagedModel<EntityModel<AppointmentResponse>> pagedModel =
                 pagedResourcesAssembler.toModel(page, appointmentModelAssembler::toModel);
 
@@ -91,7 +93,7 @@ public class AppointmentController {
             @PathVariable UUID id,
             @Valid @RequestBody UpdateAppointmentStatusRequest request
     ) {
-        Appointment updated = updateAppointmentStatusUseCase.execute(id, request.status(), request.observation());
+        Appointment updated = updateAppointmentStatusUseCase.execute(id, request.toStatus(), request.observation());
 
         return ResponseEntity.ok(ApiResponse.of(appointmentModelAssembler.toModel(updated), "Appointment status updated successfully"));
     }

@@ -249,7 +249,7 @@ class AppointmentControllerIntegrationTest {
 
         mockMvc.perform(patch("/api/v1/appointments/{id}/status", id)
                         .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(new UpdateAppointmentStatusRequest(Status.CONFIRMED, null))))
+                        .content(objectMapper.writeValueAsString(new UpdateAppointmentStatusRequest(Status.CONFIRMED.name(), null))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.status").value("CONFIRMED"))
                 .andExpect(jsonPath("$.data.links[?(@.rel=='cancel')]").exists())
@@ -262,7 +262,7 @@ class AppointmentControllerIntegrationTest {
 
         mockMvc.perform(patch("/api/v1/appointments/{id}/status", id)
                         .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(new UpdateAppointmentStatusRequest(Status.CANCELED, "patient requested cancellation"))))
+                        .content(objectMapper.writeValueAsString(new UpdateAppointmentStatusRequest(Status.CANCELED.name(), "patient requested cancellation"))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.status").value("CANCELED"))
                 .andExpect(jsonPath("$.data.observation").value("patient requested cancellation"))
@@ -276,7 +276,7 @@ class AppointmentControllerIntegrationTest {
 
         mockMvc.perform(patch("/api/v1/appointments/{id}/status", id)
                         .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(new UpdateAppointmentStatusRequest(Status.CANCELED, null))))
+                        .content(objectMapper.writeValueAsString(new UpdateAppointmentStatusRequest(Status.CANCELED.name(), null))))
                 .andExpect(status().isConflict());
     }
 
@@ -286,15 +286,26 @@ class AppointmentControllerIntegrationTest {
 
         mockMvc.perform(patch("/api/v1/appointments/{id}/status", id)
                         .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(new UpdateAppointmentStatusRequest(Status.CONFIRMED, null))))
+                        .content(objectMapper.writeValueAsString(new UpdateAppointmentStatusRequest(Status.CONFIRMED.name(), null))))
                 .andExpect(status().isConflict());
+    }
+
+    @Test
+    void shouldReturnBadRequestForStatusOutsideEnum() throws Exception {
+        UUID id = persist(Status.PENDING, 1).id();
+
+        mockMvc.perform(patch("/api/v1/appointments/{id}/status", id)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(new UpdateAppointmentStatusRequest("FOOBAR", null))))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.data.status").value("must be one of: PENDING, CONFIRMED, CANCELED"));
     }
 
     @Test
     void shouldReturnNotFoundWhenUpdatingStatusOfUnknownId() throws Exception {
         mockMvc.perform(patch("/api/v1/appointments/{id}/status", UUID.randomUUID())
                         .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(new UpdateAppointmentStatusRequest(Status.CONFIRMED, null))))
+                        .content(objectMapper.writeValueAsString(new UpdateAppointmentStatusRequest(Status.CONFIRMED.name(), null))))
                 .andExpect(status().isNotFound());
     }
 
@@ -304,7 +315,7 @@ class AppointmentControllerIntegrationTest {
 
         mockMvc.perform(patch("/api/v1/appointments/{id}/status", id)
                         .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(new UpdateAppointmentStatusRequest(Status.PENDING, null))))
+                        .content(objectMapper.writeValueAsString(new UpdateAppointmentStatusRequest(Status.PENDING.name(), null))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.status").value("PENDING"));
 
