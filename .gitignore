@@ -1,2 +1,6 @@
 ### IntelliJ IDEA ###
 .idea/
+
+### Logs ###
+backend/**/logs/*
+!backend/**/logs/.gitkeep
