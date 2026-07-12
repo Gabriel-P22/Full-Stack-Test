@@ -1,0 +1,262 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.0)
+
+2026-07-12T16:45:00.841-03:00  INFO 160662 --- [AppointmentWorkerApplication] [           main] c.a.f.s.AppointmentWorkerApplication     : Starting AppointmentWorkerApplication using Java 25.0.2 with PID 160662 (/home/dev/Documents/WORK/PERSONAL/INTERVIEW/Full-Stack-Test/backend/appointment-worker/target/classes started by dev in /home/dev/Documents/WORK/PERSONAL/INTERVIEW/Full-Stack-Test/backend/appointment-worker)
+2026-07-12T16:45:00.846-03:00  INFO 160662 --- [AppointmentWorkerApplication] [           main] c.a.f.s.AppointmentWorkerApplication     : No active profile set, falling back to 1 default profile: "default"
+2026-07-12T16:45:00.999-03:00  INFO 160662 --- [AppointmentWorkerApplication] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-07-12T16:45:01.019-03:00  INFO 160662 --- [AppointmentWorkerApplication] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 16 ms. Found 1 JPA repository interface.
+2026-07-12T16:45:01.323-03:00  INFO 160662 --- [AppointmentWorkerApplication] [           main] com.zaxxer.hikari.HikariDataSource       : AppointmentWorkerHikariPool - Starting...
+2026-07-12T16:45:01.365-03:00  INFO 160662 --- [AppointmentWorkerApplication] [           main] com.zaxxer.hikari.pool.HikariPool        : AppointmentWorkerHikariPool - Added connection conn0: url=jdbc:h2:file:../data/appointment-db user=SA
+2026-07-12T16:45:01.366-03:00  INFO 160662 --- [AppointmentWorkerApplication] [           main] com.zaxxer.hikari.HikariDataSource       : AppointmentWorkerHikariPool - Start completed.
+2026-07-12T16:45:01.372-03:00  INFO 160662 --- [AppointmentWorkerApplication] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:h2:file:../data/appointment-db (H2 2.4)
+2026-07-12T16:45:01.389-03:00  WARN 160662 --- [AppointmentWorkerApplication] [           main] o.f.c.internal.database.base.Database    : Using H2 2.4.240 which is newer than the version Flyway has been verified with. The latest verified version of H2 is 2.3.232.
+2026-07-12T16:45:01.405-03:00  INFO 160662 --- [AppointmentWorkerApplication] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 3 migrations (execution time 00:00.010s)
+2026-07-12T16:45:01.414-03:00  INFO 160662 --- [AppointmentWorkerApplication] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "PUBLIC": 3
+2026-07-12T16:45:01.417-03:00  INFO 160662 --- [AppointmentWorkerApplication] [           main] o.f.core.internal.command.DbMigrate      : Schema "PUBLIC" is up to date. No migration necessary.
+2026-07-12T16:45:01.460-03:00  INFO 160662 --- [AppointmentWorkerApplication] [           main] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-07-12T16:45:01.492-03:00  INFO 160662 --- [AppointmentWorkerApplication] [           main] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-07-12T16:45:01.638-03:00  INFO 160662 --- [AppointmentWorkerApplication] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-07-12T16:45:01.671-03:00  INFO 160662 --- [AppointmentWorkerApplication] [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [jdbc:h2:file:../data/appointment-db]
+	Database driver: H2 JDBC Driver
+	Database dialect: H2Dialect
+	Database version: 2.4.240
+	Default catalog/schema: APPOINTMENT-DB/PUBLIC
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: 100
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-07-12T16:45:02.051-03:00  INFO 160662 --- [AppointmentWorkerApplication] [           main] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-07-12T16:45:02.065-03:00  INFO 160662 --- [AppointmentWorkerApplication] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-07-12T16:45:02.101-03:00  INFO 160662 --- [AppointmentWorkerApplication] [           main] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-07-12T16:45:02.287-03:00  INFO 160662 --- [AppointmentWorkerApplication] [           main] o.a.kafka.common.config.AbstractConfig   : ConsumerConfig values: 
+	allow.auto.create.topics = true
+	auto.commit.interval.ms = 5000
+	auto.offset.reset = latest
+	bootstrap.servers = [localhost:9092]
+	check.crcs = true
+	client.dns.lookup = use_all_dns_ips
+	client.id = consumer-appointment-group-1
+	client.rack = 
+	config.providers = []
+	connections.max.idle.ms = 540000
+	default.api.timeout.ms = 60000
+	enable.auto.commit = false
+	enable.metrics.push = true
+	exclude.internal.topics = true
+	fetch.max.bytes = 52428800
+	fetch.max.wait.ms = 500
+	fetch.min.bytes = 1
+	group.id = appointment-group
+	group.instance.id = null
+	group.protocol = classic
+	group.remote.assignor = null
+	heartbeat.interval.ms = 3000
+	interceptor.classes = []
+	internal.throw.on.fetch.stable.offset.unsupported = false
+	isolation.level = read_uncommitted
+	key.deserializer = class org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+	max.partition.fetch.bytes = 1048576
+	max.poll.interval.ms = 300000
+	max.poll.records = 500
+	metadata.max.age.ms = 300000
+	metadata.recovery.rebootstrap.trigger.ms = 300000
+	metadata.recovery.strategy = rebootstrap
+	metric.reporters = [org.apache.kafka.common.metrics.JmxReporter]
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	partition.assignment.strategy = [class org.apache.kafka.clients.consumer.RangeAssignor, class org.apache.kafka.clients.consumer.CooperativeStickyAssignor]
+	receive.buffer.bytes = 65536
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retry.backoff.max.ms = 1000
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.assertion.algorithm = RS256
+	sasl.oauthbearer.assertion.claim.aud = null
+	sasl.oauthbearer.assertion.claim.exp.seconds = 300
+	sasl.oauthbearer.assertion.claim.iss = null
+	sasl.oauthbearer.assertion.claim.jti.include = false
+	sasl.oauthbearer.assertion.claim.nbf.seconds = 60
+	sasl.oauthbearer.assertion.claim.sub = null
+	sasl.oauthbearer.assertion.file = null
+	sasl.oauthbearer.assertion.private.key.file = null
+	sasl.oauthbearer.assertion.private.key.passphrase = null
+	sasl.oauthbearer.assertion.template.file = null
+	sasl.oauthbearer.client.credentials.client.id = null
+	sasl.oauthbearer.client.credentials.client.secret = null
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = []
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.header.urlencode = false
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.jwt.retriever.class = class org.apache.kafka.common.security.oauthbearer.DefaultJwtRetriever
+	sasl.oauthbearer.jwt.validator.class = class org.apache.kafka.common.security.oauthbearer.DefaultJwtValidator
+	sasl.oauthbearer.scope = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = PLAINTEXT
+	security.providers = null
+	send.buffer.bytes = 131072
+	session.timeout.ms = 45000
+	share.acknowledgement.mode = implicit
+	share.acquire.mode = BATCH_OPTIMIZED
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = []
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+	value.deserializer = class org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+
+2026-07-12T16:45:02.302-03:00  INFO 160662 --- [AppointmentWorkerApplication] [           main] o.a.k.c.t.i.KafkaMetricsCollector        : initializing Kafka metrics collector
+2026-07-12T16:45:02.345-03:00  INFO 160662 --- [AppointmentWorkerApplication] [           main] o.a.kafka.common.config.AbstractConfig   : KafkaAvroDeserializerConfig values: 
+	auto.register.schemas = true
+	avro.reflection.allow.null = false
+	avro.use.logical.type.converters = false
+	basic.auth.credentials.source = URL
+	basic.auth.user.info = [hidden]
+	bearer.auth.cache.expiry.buffer.seconds = 300
+	bearer.auth.client.id = null
+	bearer.auth.client.secret = null
+	bearer.auth.credentials.source = STATIC_TOKEN
+	bearer.auth.custom.provider.class = null
+	bearer.auth.identity.pool.id = null
+	bearer.auth.issuer.endpoint.url = null
+	bearer.auth.logical.cluster = null
+	bearer.auth.scope = null
+	bearer.auth.scope.claim.name = scope
+	bearer.auth.sub.claim.name = sub
+	bearer.auth.token = [hidden]
+	context.name.strategy = class io.confluent.kafka.serializers.context.NullContextNameStrategy
+	http.connect.timeout.ms = 60000
+	http.read.timeout.ms = 60000
+	id.compatibility.strict = true
+	key.subject.name.strategy = class io.confluent.kafka.serializers.subject.TopicNameStrategy
+	latest.cache.size = 1000
+	latest.cache.ttl.sec = -1
+	latest.compatibility.strict = true
+	max.schemas.per.subject = 1000
+	normalize.schemas = false
+	proxy.host = 
+	proxy.port = -1
+	rule.actions = []
+	rule.executors = []
+	rule.service.loader.enable = true
+	schema.format = null
+	schema.reflection = false
+	schema.registry.basic.auth.user.info = [hidden]
+	schema.registry.ssl.cipher.suites = []
+	schema.registry.ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	schema.registry.ssl.endpoint.identification.algorithm = https
+	schema.registry.ssl.engine.factory.class = null
+	schema.registry.ssl.key.password = null
+	schema.registry.ssl.keymanager.algorithm = SunX509
+	schema.registry.ssl.keystore.certificate.chain = null
+	schema.registry.ssl.keystore.key = null
+	schema.registry.ssl.keystore.location = null
+	schema.registry.ssl.keystore.password = null
+	schema.registry.ssl.keystore.type = JKS
+	schema.registry.ssl.protocol = TLSv1.3
+	schema.registry.ssl.provider = null
+	schema.registry.ssl.secure.random.implementation = null
+	schema.registry.ssl.trustmanager.algorithm = PKIX
+	schema.registry.ssl.truststore.certificates = null
+	schema.registry.ssl.truststore.location = null
+	schema.registry.ssl.truststore.password = null
+	schema.registry.ssl.truststore.type = JKS
+	schema.registry.url = [http://localhost:8081]
+	specific.avro.key.type = null
+	specific.avro.reader = true
+	specific.avro.value.type = null
+	use.latest.version = false
+	use.latest.with.metadata = null
+	use.schema.id = -1
+	value.subject.name.strategy = class io.confluent.kafka.serializers.subject.TopicNameStrategy
+
+2026-07-12T16:45:02.416-03:00  INFO 160662 --- [AppointmentWorkerApplication] [           main] o.a.kafka.common.config.AbstractConfig   : These configurations '[schema.registry.url, specific.avro.reader]' were supplied but are not used yet.
+2026-07-12T16:45:02.417-03:00  INFO 160662 --- [AppointmentWorkerApplication] [           main] o.a.kafka.common.utils.AppInfoParser     : Kafka version: 4.2.1
+2026-07-12T16:45:02.417-03:00  INFO 160662 --- [AppointmentWorkerApplication] [           main] o.a.kafka.common.utils.AppInfoParser     : Kafka commitId: 92f61c44867f39dc
+2026-07-12T16:45:02.417-03:00  INFO 160662 --- [AppointmentWorkerApplication] [           main] o.a.kafka.common.utils.AppInfoParser     : Kafka startTimeMs: 1783885502416
+2026-07-12T16:45:02.419-03:00  INFO 160662 --- [AppointmentWorkerApplication] [           main] o.a.k.c.c.i.ClassicKafkaConsumer         : [Consumer clientId=consumer-appointment-group-1, groupId=appointment-group] Subscribed to topic(s): appointment-events-topic
+2026-07-12T16:45:02.423-03:00  INFO 160662 --- [AppointmentWorkerApplication] [           main] c.a.f.s.AppointmentWorkerApplication     : Started AppointmentWorkerApplication in 1.782 seconds (process running for 1.917)
+2026-07-12T16:45:02.552-03:00  INFO 160662 --- [AppointmentWorkerApplication] [ntainer#0-0-C-1] org.apache.kafka.clients.Metadata        : [Consumer clientId=consumer-appointment-group-1, groupId=appointment-group] Cluster ID: Some(MkU3OEVBNTcwNTJENDM2Qk)
+2026-07-12T16:45:02.554-03:00  INFO 160662 --- [AppointmentWorkerApplication] [ntainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-appointment-group-1, groupId=appointment-group] Discovered group coordinator localhost:9092 (id: 2147483646 rack: null isFenced: false)
+2026-07-12T16:45:02.555-03:00  INFO 160662 --- [AppointmentWorkerApplication] [ntainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-appointment-group-1, groupId=appointment-group] (Re-)joining group
+2026-07-12T16:45:02.561-03:00  INFO 160662 --- [AppointmentWorkerApplication] [ntainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-appointment-group-1, groupId=appointment-group] Request joining group due to: need to re-join with the given member-id: consumer-appointment-group-1-24cada4a-1898-4672-b4e3-78ce694182d7
+2026-07-12T16:45:02.561-03:00  INFO 160662 --- [AppointmentWorkerApplication] [ntainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-appointment-group-1, groupId=appointment-group] (Re-)joining group
+2026-07-12T16:45:02.564-03:00  INFO 160662 --- [AppointmentWorkerApplication] [ntainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-appointment-group-1, groupId=appointment-group] Successfully joined group with generation Generation{generationId=11, memberId='consumer-appointment-group-1-24cada4a-1898-4672-b4e3-78ce694182d7', protocol='range'}
+2026-07-12T16:45:02.566-03:00  INFO 160662 --- [AppointmentWorkerApplication] [ntainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-appointment-group-1, groupId=appointment-group] Finished assignment for group at generation 11: {consumer-appointment-group-1-24cada4a-1898-4672-b4e3-78ce694182d7=Assignment(partitions=[appointment-events-topic-0])}
+2026-07-12T16:45:02.569-03:00  INFO 160662 --- [AppointmentWorkerApplication] [ntainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-appointment-group-1, groupId=appointment-group] Successfully synced group in generation Generation{generationId=11, memberId='consumer-appointment-group-1-24cada4a-1898-4672-b4e3-78ce694182d7', protocol='range'}
+2026-07-12T16:45:02.569-03:00  INFO 160662 --- [AppointmentWorkerApplication] [ntainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-appointment-group-1, groupId=appointment-group] Notifying assignor about the new Assignment(partitions=[appointment-events-topic-0])
+2026-07-12T16:45:02.570-03:00  INFO 160662 --- [AppointmentWorkerApplication] [ntainer#0-0-C-1] k.c.c.i.ConsumerRebalanceListenerInvoker : [Consumer clientId=consumer-appointment-group-1, groupId=appointment-group] Adding newly assigned partitions: [appointment-events-topic-0]
+2026-07-12T16:45:02.579-03:00  INFO 160662 --- [AppointmentWorkerApplication] [ntainer#0-0-C-1] o.a.k.c.c.internals.ConsumerUtils        : Setting offset for partition appointment-events-topic-0 to the committed offset FetchPosition{offset=18, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:9092 (id: 1 rack: null isFenced: false)], epoch=8}}
+2026-07-12T16:45:02.581-03:00  INFO 160662 --- [AppointmentWorkerApplication] [ntainer#0-0-C-1] o.s.k.l.KafkaMessageListenerContainer    : appointment-group: partitions assigned: [appointment-events-topic-0]
+2026-07-12T16:45:27.103-03:00  INFO 160662 --- [AppointmentWorkerApplication] [ntainer#0-0-C-1] c.a.a.i.m.AppointmentEventConsumer       : Event received - key: 50b36045-23c3-4c8b-a388-059fbe35969d, partition: 0, offset: 18, payload: {"id": "50b36045-23c3-4c8b-a388-059fbe35969d", "patientCpf": "529.982.247-25", "patientName": "Pos Restart Apps", "scheduledAt": "2034-01-01T09:00:00Z", "status": "PENDING", "observation": null, "createdAt": "2026-07-12T16:45:26.468Z", "updatedAt": null}
+2026-07-12T16:45:27.301-03:00  INFO 160662 --- [AppointmentWorkerApplication] [ntainer#0-0-C-1] c.a.u.i.ConfirmAppointmentUseCaseImpl    : Appointment 50b36045-23c3-4c8b-a388-059fbe35969d confirmed
+2026-07-12T16:46:22.298-03:00  INFO 160662 --- [AppointmentWorkerApplication] [ntainer#0-0-C-1] c.a.a.i.m.AppointmentEventConsumer       : Event received - key: 9c42d457-0f92-4a85-a5f2-3e30ad5afac8, partition: 0, offset: 19, payload: {"id": "9c42d457-0f92-4a85-a5f2-3e30ad5afac8", "patientCpf": "529.982.247-25", "patientName": "John Doe", "scheduledAt": "2030-02-01T10:00:00Z", "status": "PENDING", "observation": null, "createdAt": "2026-07-12T16:46:22.283Z", "updatedAt": null}
+2026-07-12T16:46:22.306-03:00  INFO 160662 --- [AppointmentWorkerApplication] [ntainer#0-0-C-1] c.a.u.i.ConfirmAppointmentUseCaseImpl    : Appointment 9c42d457-0f92-4a85-a5f2-3e30ad5afac8 confirmed
+2026-07-12T17:37:31.454-03:00  INFO 160662 --- [AppointmentWorkerApplication] [ntainer#0-0-C-1] k.c.c.i.ConsumerRebalanceListenerInvoker : [Consumer clientId=consumer-appointment-group-1, groupId=appointment-group] Revoke previously assigned partitions [appointment-events-topic-0]
+2026-07-12T17:37:31.456-03:00  INFO 160662 --- [AppointmentWorkerApplication] [ntainer#0-0-C-1] o.s.k.l.KafkaMessageListenerContainer    : appointment-group: partitions revoked: [appointment-events-topic-0]
+2026-07-12T17:37:31.456-03:00  INFO 160662 --- [AppointmentWorkerApplication] [ntainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-appointment-group-1, groupId=appointment-group] Member consumer-appointment-group-1-24cada4a-1898-4672-b4e3-78ce694182d7 sending LeaveGroup request to coordinator localhost:9092 (id: 2147483646 rack: null isFenced: false) due to the consumer unsubscribed from all topics
+2026-07-12T17:37:31.457-03:00  INFO 160662 --- [AppointmentWorkerApplication] [ntainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-appointment-group-1, groupId=appointment-group] Resetting generation and member id due to: consumer pro-actively leaving the group
+2026-07-12T17:37:31.457-03:00  INFO 160662 --- [AppointmentWorkerApplication] [ntainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-appointment-group-1, groupId=appointment-group] Request joining group due to: consumer pro-actively leaving the group
+2026-07-12T17:37:31.457-03:00  INFO 160662 --- [AppointmentWorkerApplication] [ntainer#0-0-C-1] o.a.k.c.c.i.ClassicKafkaConsumer         : [Consumer clientId=consumer-appointment-group-1, groupId=appointment-group] Unsubscribed all topics or patterns and assigned partitions
+2026-07-12T17:37:31.459-03:00  INFO 160662 --- [AppointmentWorkerApplication] [ntainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-appointment-group-1, groupId=appointment-group] Resetting generation and member id due to: consumer pro-actively leaving the group
+2026-07-12T17:37:31.459-03:00  INFO 160662 --- [AppointmentWorkerApplication] [ntainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-appointment-group-1, groupId=appointment-group] Request joining group due to: consumer pro-actively leaving the group
+2026-07-12T17:37:31.611-03:00  INFO 160662 --- [AppointmentWorkerApplication] [ntainer#0-0-C-1] o.apache.kafka.common.metrics.Metrics    : Metrics scheduler closed
+2026-07-12T17:37:31.612-03:00  INFO 160662 --- [AppointmentWorkerApplication] [ntainer#0-0-C-1] o.apache.kafka.common.metrics.Metrics    : Closing reporter org.apache.kafka.common.metrics.JmxReporter
+2026-07-12T17:37:31.612-03:00  INFO 160662 --- [AppointmentWorkerApplication] [ntainer#0-0-C-1] o.apache.kafka.common.metrics.Metrics    : Closing reporter org.apache.kafka.common.telemetry.internals.ClientTelemetryReporter
+2026-07-12T17:37:31.612-03:00  INFO 160662 --- [AppointmentWorkerApplication] [ntainer#0-0-C-1] o.apache.kafka.common.metrics.Metrics    : Metrics reporters closed
+2026-07-12T17:37:31.615-03:00  INFO 160662 --- [AppointmentWorkerApplication] [ntainer#0-0-C-1] o.a.kafka.common.utils.AppInfoParser     : App info kafka.consumer for consumer-appointment-group-1 unregistered
+2026-07-12T17:37:31.615-03:00  INFO 160662 --- [AppointmentWorkerApplication] [ntainer#0-0-C-1] o.s.k.l.KafkaMessageListenerContainer    : appointment-group: Consumer stopped
+2026-07-12T17:37:31.618-03:00  INFO 160662 --- [AppointmentWorkerApplication] [ionShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-07-12T17:37:31.621-03:00  INFO 160662 --- [AppointmentWorkerApplication] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : AppointmentWorkerHikariPool - Shutdown initiated...
+2026-07-12T17:37:31.869-03:00  INFO 160662 --- [AppointmentWorkerApplication] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : AppointmentWorkerHikariPool - Shutdown completed.
