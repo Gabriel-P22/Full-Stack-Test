@@ -279,3 +279,19 @@ Principais pontos:
 - Responsivo, com testes unitários (Vitest + Testing Library) cobrindo ≥ 80% do código
 
 Para instruções de setup, scripts disponíveis e detalhes de arquitetura, veja **[`frontend/README.md`](frontend/README.md)**.
+
+### CI/CD
+
+Mesmo modelo do backend, em dois workflows separados (`.github/workflows/frontend-ci.yml` e
+`frontend-cd.yml`), pra não misturar com a pipeline do backend:
+
+- **Frontend CI** — roda em todo push e pull request: instala as dependências (`pnpm install
+  --frozen-lockfile`), roda o lint (`oxlint`), builda (`tsc -b && vite build` — valida tipos e gera o
+  bundle de produção) e roda os testes com o gate de cobertura do Vitest (mínimo 80% em statements,
+  branches, functions e lines, já configurado no `vite.config.ts`). O relatório de cobertura sobe como
+  artifact do run.
+- **Frontend CD** — dispara depois que a CI do frontend passa na `main` (ou manualmente via
+  `workflow_dispatch`): builda o bundle de novo e builda uma imagem Docker (`verity-frontend:<sha>`) a
+  partir de um `Dockerfile` multi-stage novo (Node + pnpm builda o `dist/`, um `nginx:alpine` enxuto serve
+  os arquivos estáticos, com fallback de rota pro `index.html` pra funcionar com o client-side routing do
+  `react-router-dom`). Assim como no backend, o passo de deploy em si ainda é um placeholder.
