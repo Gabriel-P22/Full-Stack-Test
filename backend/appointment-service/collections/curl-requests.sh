@@ -7,21 +7,17 @@
 # "Import > Raw text (curl)" to generate a request automatically.
 #
 # Replace <APPOINTMENT_ID> with an id returned by the create/list requests.
-# Adjust the host if the app is running on a different port (see docker-compose.yml).
 
 BASE_URL="http://localhost:8080/api/v1"
 
 # ---------------------------------------------------------------------------
 # 1. Create an appointment
-#    Idempotency-Key is required; replaying the same key returns the same
-#    appointment instead of creating a duplicate.
 # ---------------------------------------------------------------------------
-curl -X POST "$BASE_URL/appointment" \
+curl -X POST "$BASE_URL/appointments" \
   -H "Content-Type: application/json" \
-  -H "Idempotency-Key: 11111111-1111-1111-1111-111111111111" \
   -d '{
-        "patientCpf": "52998224725",
         "patientName": "John Doe",
+        "patientCpf": "52998224725",
         "scheduledAt": "2027-01-01T10:00:00"
       }'
 
@@ -60,48 +56,36 @@ curl -X PATCH "$BASE_URL/appointments/<APPOINTMENT_ID>/status" \
       }'
 
 # ---------------------------------------------------------------------------
-# 7. Update status -> back to PENDING
-#    Republishes the appointment to Kafka; it gets asynchronously
-#    reconfirmed (or auto-canceled if the slot/date is no longer valid).
-# ---------------------------------------------------------------------------
-curl -X PATCH "$BASE_URL/appointments/<APPOINTMENT_ID>/status" \
-  -H "Content-Type: application/json" \
-  -d '{
-        "status": "PENDING"
-      }'
-
-# ---------------------------------------------------------------------------
 # Error scenarios (useful for testing the error responses)
 # ---------------------------------------------------------------------------
 
-# Missing Idempotency-Key header -> 400 Bad Request
-curl -X POST "$BASE_URL/appointment" \
+# Invalid CPF (not exactly 11 digits) -> 400 Bad Request
+curl -X POST "$BASE_URL/appointments" \
   -H "Content-Type: application/json" \
   -d '{
+        "patientName": "John Doe",
+        "patientCpf": "12345",
+        "scheduledAt": "2027-01-01T10:00:00"
+      }'
+
+# Date in the past -> 400 Bad Request
+curl -X POST "$BASE_URL/appointments" \
+  -H "Content-Type: application/json" \
+  -d '{
+        "patientName": "John Doe",
         "patientCpf": "52998224725",
-        "patientName": "John Doe",
-        "scheduledAt": "2027-01-01T10:00:00"
+        "scheduledAt": "2020-01-01T10:00:00"
       }'
 
-# Invalid CPF -> 400 Bad Request
-curl -X POST "$BASE_URL/appointment" \
-  -H "Content-Type: application/json" \
-  -H "Idempotency-Key: 22222222-2222-2222-2222-222222222222" \
-  -d '{
-        "patientCpf": "12345678900",
-        "patientName": "John Doe",
-        "scheduledAt": "2027-01-01T10:00:00"
-      }'
-
-# Slot already taken (run the create request from step 1 twice with a
-# different Idempotency-Key but the same scheduledAt) -> 409 Conflict
-
-# Cancel without observation -> 409 Conflict
+# Cancel without observation -> 400 Bad Request
 curl -X PATCH "$BASE_URL/appointments/<APPOINTMENT_ID>/status" \
   -H "Content-Type: application/json" \
   -d '{
         "status": "CANCELED"
       }'
+
+# Change status of an already-canceled appointment -> 409 Conflict
+# (run the cancel request above twice against the same <APPOINTMENT_ID>)
 
 # Unknown id -> 404 Not Found
 curl -X GET "$BASE_URL/appointments/00000000-0000-0000-0000-000000000000"

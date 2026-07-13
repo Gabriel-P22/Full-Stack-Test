@@ -4,17 +4,38 @@ Este projeto está estruturado em dois módulos de alto nível:
 
 ```
 .
-├── backend/    <- API Spring Boot + processamento de eventos Kafka (implementado)
+├── backend/    <- API Spring Boot (arquitetura hexagonal)
 └── frontend/   <- cadastro Verity em 3 etapas, React + TypeScript + Vite (implementado)
 ```
 
 ## Backend
 
-Esta é a branch **monólito** (`main`): a API REST, a lógica de domínio, o produtor Kafka e o consumidor Kafka rodam juntos como uma única aplicação Spring Boot em `backend/appointment-service`.
+API REST em Spring Boot (`backend/appointment-service`) para gestão de agendamentos, seguindo os
+princípios de Clean/Hexagonal Architecture. O pacote raiz `com.desafio.agendamento` é organizado em
+camadas:
 
-Existe uma branch irmã, **`feat/multi-module`**, com os mesmos casos de uso divididos em módulos Maven implantáveis de forma independente (API vs. worker). Veja essa branch para a versão modular — ela tem seu próprio README.
+```
+com.desafio.agendamento/
+├── entities/            entidades de domínio — sem dependências externas
+├── usecases/
+│   ├── ports/in/         interfaces dos casos de uso
+│   ├── ports/out/        portas de saída (ex: persistência)
+│   └── impl/             implementações dos casos de uso
+├── adapters/
+│   ├── in/controller/    REST controller + DTOs
+│   └── out/persistence/  entidade JPA + Spring Data repository + implementação do port
+└── frameworks/
+    ├── spring/           classe main
+    ├── config/           beans de configuração
+    └── exceptions/       exceções de domínio + handler global
+```
 
-Para saber como rodar esta branch (tanto no modo "infra no Docker, app local" quanto totalmente containerizado), variáveis de ambiente e tudo mais, veja **[`backend/appointment-service/README.md`](backend/appointment-service/README.md)**.
+Persistência com Spring Data JPA + H2 em memória (schema versionado via Flyway), validação com Bean
+Validation, tratamento de erros centralizado com `@RestControllerAdvice`, documentação via SpringDoc
+OpenAPI e testes unitários + de integração.
+
+Para instruções de como rodar a aplicação, veja
+**[`backend/appointment-service/README.md`](backend/appointment-service/README.md)**.
 
 ## Frontend
 

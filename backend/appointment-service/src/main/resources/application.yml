@@ -30,30 +30,6 @@ spring:
     enabled: true
     locations: classpath:db/migration
 
-  kafka:
-    bootstrap-servers: localhost:9092
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
-      properties:
-        schema.registry.url: http://localhost:8081
-    consumer:
-      group-id: appointment-group
-      key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
-      properties:
-        schema.registry.url: http://localhost:8081
-        specific.avro.reader: true
-        spring.deserializer.key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
-        spring.deserializer.value.delegate.class: io.confluent.kafka.serializers.KafkaAvroDeserializer
-
-logging:
-  file:
-    name: logs/appointment-service.log
-  structured:
-    format:
-      file: ecs
-
 springdoc:
   api-docs:
     enabled: true
@@ -64,33 +40,9 @@ springdoc:
     operations-sorter: method
     tags-sorter: alpha
   paths-to-match: /api/**
-  packages-to-scan: com.appointment.adapters.in.controller
+  packages-to-scan: com.desafio.agendamento.adapters.in.controller
 
 response:
   error-messages:
-    invalid-cpf: It's not possible create a appointment with invalid CPF. Try again
-    appointment-with-invalid-date: It's not possible create a appointment with invalid date. Try again
-
-appointment:
-  kafka:
-    topic: appointment-events-topic
-    dlt:
-      suffix: -dlt
-      deserialization-suffix: -deserialization-dlt
-    retry:
-      backoff-interval-ms: 1000
-      max-attempts: 2
-
-resilience4j:
-  circuitbreaker:
-    instances:
-      appointmentEventProducer:
-        sliding-window-type: COUNT_BASED
-        sliding-window-size: 10
-        minimum-number-of-calls: 5
-        failure-rate-threshold: 50
-        slow-call-duration-threshold: 1s
-        slow-call-rate-threshold: 100
-        wait-duration-in-open-state: 5s
-        permitted-number-of-calls-in-half-open-state: 3
-        automatic-transition-from-open-to-half-open-enabled: true
+    invalid-cpf: CPF must contain exactly 11 digits.
+    appointment-with-invalid-date: It's not possible to create an appointment with a date in the past.
