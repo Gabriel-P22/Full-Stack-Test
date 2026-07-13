@@ -1,21 +1,8 @@
+@import './constants/spacing.css';
+@import './constants/colors.css';
+@import './constants/breakpoints.css';
+
 :root {
-  --verity-blue-900: #082b63;
-  --verity-blue-700: #0d47a1;
-  --verity-blue-600: #1257b8;
-  --verity-blue-500: #1e6fd9;
-  --verity-blue-100: #e8f1fc;
-  --verity-blue-50: #f4f8fe;
-
-  --color-white: #ffffff;
-  --color-gray-900: #1a1f29;
-  --color-gray-600: #5b6472;
-  --color-gray-400: #8b93a1;
-  --color-gray-200: #e2e6ec;
-  --color-gray-100: #f1f3f7;
-
-  --color-error: #c62828;
-  --color-success: #1e8e3e;
-
   --radius-sm: 6px;
   --radius-md: 10px;
   --radius-lg: 16px;
@@ -63,7 +50,7 @@ button {
 .app-header {
   background-color: var(--color-white);
   border-bottom: 1px solid var(--color-gray-200);
-  padding: 16px 24px;
+  padding: var(--space-6) var(--space-9);
   display: flex;
   align-items: center;
 }
@@ -73,12 +60,12 @@ button {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 24px 16px 48px;
+  padding: var(--space-9) var(--space-6) var(--space-11);
 }
 
 .app-footer {
   text-align: center;
-  padding: 16px;
+  padding: var(--space-6);
   color: var(--color-gray-400);
   font-size: 12px;
 }
@@ -86,7 +73,7 @@ button {
 .logo-mark {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-3);
 }
 
 .logo-image {
@@ -95,14 +82,13 @@ button {
   display: block;
 }
 
-/* Step indicator */
 .step-indicator {
   list-style: none;
   display: flex;
   justify-content: center;
-  gap: 8px;
-  margin: 24px auto 0;
-  padding: 0 16px;
+  gap: var(--space-3);
+  margin: var(--space-9) auto 0;
+  padding: 0 var(--space-6);
   max-width: 720px;
   width: 100%;
 }
@@ -112,7 +98,7 @@ button {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: var(--space-2);
   text-align: center;
 }
 
@@ -150,15 +136,14 @@ button {
   border: 2px solid var(--verity-blue-500);
 }
 
-/* Card / wizard shell */
 .card {
   width: 100%;
   max-width: 720px;
   background-color: var(--color-white);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
-  padding: 32px;
-  margin-top: 24px;
+  padding: var(--space-10);
+  margin-top: var(--space-9);
 }
 
 .step-title {
@@ -168,7 +153,7 @@ button {
 }
 
 .step-description {
-  margin-top: 6px;
+  margin-top: var(--space-2);
   color: var(--color-gray-600);
   font-size: 14px;
 }
@@ -176,11 +161,11 @@ button {
 .field-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 18px;
-  margin-top: 24px;
+  gap: var(--space-7);
+  margin-top: var(--space-9);
 }
 
-@media (min-width: 640px) {
+@media (--breakpoint-tablet) {
   .field-grid {
     grid-template-columns: 1fr 1fr;
   }
@@ -193,7 +178,7 @@ button {
 .field {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: var(--space-2);
 }
 
 .field label {
@@ -206,7 +191,7 @@ button {
 .field select {
   border: 1px solid var(--color-gray-200);
   border-radius: var(--radius-sm);
-  padding: 10px 12px;
+  padding: var(--space-4) var(--space-5);
   font-size: 14px;
   background-color: var(--color-white);
   color: var(--color-gray-900);
@@ -243,18 +228,17 @@ button {
   color: var(--color-error);
 }
 
-/* Buttons */
 .wizard-actions {
   display: flex;
   justify-content: flex-end;
-  gap: 12px;
-  margin-top: 32px;
+  gap: var(--space-5);
+  margin-top: var(--space-10);
 }
 
 .btn {
   border: none;
   border-radius: var(--radius-sm);
-  padding: 11px 22px;
+  padding: var(--space-5) var(--space-9);
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -298,10 +282,9 @@ button {
   text-decoration: underline;
 }
 
-/* Summary page */
 .summary-section {
-  margin-top: 20px;
-  padding: 18px;
+  margin-top: var(--space-8);
+  padding: var(--space-7);
   background-color: var(--verity-blue-50);
   border-radius: var(--radius-md);
 }
@@ -318,13 +301,13 @@ button {
 }
 
 .summary-list {
-  margin: 12px 0 0;
+  margin: var(--space-5) 0 0;
   display: grid;
   grid-template-columns: 1fr;
-  gap: 10px;
+  gap: var(--space-4);
 }
 
-@media (min-width: 640px) {
+@media (--breakpoint-tablet) {
   .summary-list {
     grid-template-columns: 1fr 1fr;
   }
@@ -338,15 +321,15 @@ button {
 }
 
 .summary-row dd {
-  margin: 2px 0 0;
+  margin: var(--space-0) 0 0;
   font-size: 14px;
   color: var(--color-gray-900);
   font-weight: 500;
 }
 
-@media (max-width: 480px) {
+@media (--breakpoint-mobile) {
   .card {
-    padding: 20px;
+    padding: var(--space-8);
   }
 
   .wizard-actions {

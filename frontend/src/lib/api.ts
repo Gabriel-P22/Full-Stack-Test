@@ -43,10 +43,6 @@ async function fetchCepFromViaCep(cep: string): Promise<CepResult | null> {
   }
 }
 
-/**
- * Tries the mocked json-server first (challenge requirement) and falls back
- * to the public ViaCEP service when the CEP isn't present in the mock db (bonus requirement).
- */
 export async function fetchAddressByCep(cep: string): Promise<CepResult | null> {
   const mockResult = await fetchCepFromMock(cep)
   if (mockResult) return mockResult

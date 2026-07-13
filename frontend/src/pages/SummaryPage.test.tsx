@@ -51,7 +51,6 @@ describe('SummaryPage', () => {
     expect(screen.getByText('Maria da Silva Souza')).toBeInTheDocument()
     expect(screen.getByText('529.982.247-25')).toBeInTheDocument()
     expect(screen.getByText('R$ 8.500,50')).toBeInTheDocument()
-    // "São Paulo" appears twice: once as the city, once as the translated UF label.
     expect(screen.getAllByText('São Paulo')).toHaveLength(2)
     expect(screen.getByText('De 2 a 5 anos')).toBeInTheDocument()
   })

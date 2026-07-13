@@ -6,7 +6,6 @@ const NON_BREAKING_SPACE = ' '
 
 function formatBRLFromDigits(digits: string): string {
   const numeric = Number(digits || '0') / 100
-  // toLocaleString inserts a non-breaking space after "R$"; normalize to a regular space.
   return numeric
     .toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
     .replaceAll(NON_BREAKING_SPACE, ' ')
@@ -40,8 +39,6 @@ export function CurrencyField({ name, label, fullWidth }: Readonly<CurrencyField
             aria-describedby={error ? `${name}-error` : undefined}
             value={field.value ?? ''}
             onChange={(event) => {
-              // Strip leading zeros so backspacing down to nothing actually clears the
-              // field instead of getting stuck re-formatting to "R$ 0,00" forever.
               const digits = onlyDigits(event.target.value).replace(/^0+/, '').slice(0, 12)
               field.onChange(digits ? formatBRLFromDigits(digits) : '')
             }}

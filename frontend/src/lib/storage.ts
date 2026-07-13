@@ -13,9 +13,7 @@ export function loadStoredFormValues<T>(): Partial<T> | undefined {
 export function persistFormValues(values: unknown): void {
   try {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(values))
-  } catch {
-    // storage unavailable (e.g. private mode) — form still works in-memory
-  }
+  } catch {}
 }
 
 export function clearStoredFormValues(): void {
