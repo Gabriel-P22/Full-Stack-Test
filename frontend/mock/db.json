@@ -1,0 +1,86 @@
+{
+  "ceps": [
+    {
+      "id": "01310100",
+      "endereco": "Avenida Paulista",
+      "bairro": "Bela Vista",
+      "cidade": "São Paulo",
+      "estado": "SP"
+    },
+    {
+      "id": "01001000",
+      "endereco": "Praça da Sé",
+      "bairro": "Sé",
+      "cidade": "São Paulo",
+      "estado": "SP"
+    },
+    {
+      "id": "20040020",
+      "endereco": "Avenida Rio Branco",
+      "bairro": "Centro",
+      "cidade": "Rio de Janeiro",
+      "estado": "RJ"
+    },
+    {
+      "id": "30130010",
+      "endereco": "Avenida Afonso Pena",
+      "bairro": "Centro",
+      "cidade": "Belo Horizonte",
+      "estado": "MG"
+    },
+    {
+      "id": "80010000",
+      "endereco": "Rua XV de Novembro",
+      "bairro": "Centro",
+      "cidade": "Curitiba",
+      "estado": "PR"
+    },
+    {
+      "id": "90010000",
+      "endereco": "Rua dos Andradas",
+      "bairro": "Centro Histórico",
+      "cidade": "Porto Alegre",
+      "estado": "RS"
+    },
+    {
+      "id": "40010000",
+      "endereco": "Avenida Sete de Setembro",
+      "bairro": "Centro",
+      "cidade": "Salvador",
+      "estado": "BA"
+    },
+    {
+      "id": "70040010",
+      "endereco": "Praça dos Três Poderes",
+      "bairro": "Zona Cívico-Administrativa",
+      "cidade": "Brasília",
+      "estado": "DF"
+    },
+    {
+      "id": "60060170",
+      "endereco": "Avenida Beira Mar",
+      "bairro": "Praia de Iracema",
+      "cidade": "Fortaleza",
+      "estado": "CE"
+    },
+    {
+      "id": "50030230",
+      "endereco": "Avenida Guararapes",
+      "bairro": "Santo Antônio",
+      "cidade": "Recife",
+      "estado": "PE"
+    }
+  ],
+  "professions": [
+    { "id": 1, "name": "Desenvolvedor(a) de Software" },
+    { "id": 2, "name": "Analista de Sistemas" },
+    { "id": 3, "name": "Designer UX/UI" },
+    { "id": 4, "name": "Gerente de Projetos" },
+    { "id": 5, "name": "Analista Financeiro" },
+    { "id": 6, "name": "Advogado(a)" },
+    { "id": 7, "name": "Médico(a)" },
+    { "id": 8, "name": "Professor(a)" },
+    { "id": 9, "name": "Contador(a)" },
+    { "id": 10, "name": "Engenheiro(a) Civil" }
+  ]
+}
