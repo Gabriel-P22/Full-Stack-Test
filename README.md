@@ -5,7 +5,7 @@ Este projeto está estruturado em dois módulos de alto nível:
 ```
 .
 ├── backend/    <- API Spring Boot + processamento de eventos Kafka (implementado)
-└── frontend/   <- ainda não implementado
+└── frontend/   <- cadastro Verity em 3 etapas, React + TypeScript + Vite (implementado)
 ```
 
 ## Backend
@@ -18,4 +18,15 @@ Para saber como rodar esta branch (tanto no modo "infra no Docker, app local" qu
 
 ## Frontend
 
-Ainda não implementado neste repositório.
+Aplicação **Verity** de cadastro em 3 etapas (Dados Pessoais, Informações Residenciais e Informações Profissionais) com resumo final e exportação em PDF, construída com React + TypeScript + Vite.
+
+Principais pontos:
+
+- **React Hook Form + Zod** para validação, com máscaras (react-imask) em Data de Nascimento, CPF, Telefone, CEP e Salário
+- Busca automática de CEP via **json-server** mockado, com fallback para o **ViaCEP** público
+- Lista de Profissões carregada via GET no json-server
+- Dados persistidos em `localStorage` entre as etapas e após reload
+- Exportação do resumo em **PDF** (jsPDF)
+- Responsivo, com testes unitários (Vitest + Testing Library) cobrindo ≥ 80% do código
+
+Para instruções de setup, scripts disponíveis e detalhes de arquitetura, veja **[`frontend/README.md`](frontend/README.md)**.
