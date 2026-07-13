@@ -53,6 +53,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
     }
 
+    @ExceptionHandler(AppointmentSlotUnavailableException.class)
+    public ResponseEntity<ApiResponse<Void>> handleAppointmentSlotUnavailable(AppointmentSlotUnavailableException ex) {
+        ApiResponse<Void> body = ApiResponse.of(null, ex.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(body);
+    }
+
     @ExceptionHandler(NoResourceFoundException.class)
     public ResponseEntity<Void> handleNoResourceFound(NoResourceFoundException ex) {
         return ResponseEntity.notFound().build();

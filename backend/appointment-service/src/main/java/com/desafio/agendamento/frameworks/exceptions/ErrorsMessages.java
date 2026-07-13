@@ -9,6 +9,9 @@ public enum ErrorsMessages {
     ),
     APPOINTMENT_NOT_FOUND(
             "Appointment not found"
+    ),
+    APPOINTMENT_SLOT_UNAVAILABLE(
+            "There is already an appointment scheduled for this time. Please choose another time."
     );
 
     private final String message;

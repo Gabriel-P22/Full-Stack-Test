@@ -53,6 +53,16 @@ class GlobalExceptionHandlerTest {
     }
 
     @Test
+    void shouldReturnConflictForAppointmentSlotUnavailable() {
+        ResponseEntity<ApiResponse<Void>> response =
+                handler.handleAppointmentSlotUnavailable(new AppointmentSlotUnavailableException("slot taken"));
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().message()).isEqualTo("slot taken");
+    }
+
+    @Test
     void shouldReturnNotFoundForAppointmentNotFound() {
         ResponseEntity<ApiResponse<Void>> response =
                 handler.handleAppointmentNotFound(new AppointmentNotFoundException("not found"));

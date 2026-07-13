@@ -81,7 +81,7 @@ class AppointmentControllerIntegrationTest {
                 .andExpect(jsonPath("$.data.id").exists())
                 .andExpect(jsonPath("$.data.patientName").value("John Doe"))
                 .andExpect(jsonPath("$.data.patientCpf").value(VALID_CPF))
-                .andExpect(jsonPath("$.data.status").value("PENDING"));
+                .andExpect(jsonPath("$.data.status").value("CONFIRMED"));
     }
 
     @Test
@@ -102,6 +102,22 @@ class AppointmentControllerIntegrationTest {
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void shouldReturnConflictWhenAnActiveAppointmentAlreadyExistsAtTheSameTime() throws Exception {
+        LocalDateTime slot = futureSlot(50);
+        AppointmentRequest firstRequest = validRequest(slot);
+
+        mockMvc.perform(post("/api/v1/appointments")
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(firstRequest)))
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(post("/api/v1/appointments")
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(firstRequest)))
+                .andExpect(status().isConflict());
     }
 
     @Test
