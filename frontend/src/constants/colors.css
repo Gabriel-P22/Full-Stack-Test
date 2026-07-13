@@ -1,0 +1,18 @@
+:root {
+  --verity-blue-900: #082b63;
+  --verity-blue-700: #0d47a1;
+  --verity-blue-600: #1257b8;
+  --verity-blue-500: #1e6fd9;
+  --verity-blue-100: #e8f1fc;
+  --verity-blue-50: #f4f8fe;
+
+  --color-white: #ffffff;
+  --color-gray-900: #1a1f29;
+  --color-gray-600: #5b6472;
+  --color-gray-400: #8b93a1;
+  --color-gray-200: #e2e6ec;
+  --color-gray-100: #f1f3f7;
+
+  --color-error: #c62828;
+  --color-success: #1e8e3e;
+}

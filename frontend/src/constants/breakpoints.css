@@ -1,0 +1,2 @@
+@custom-media --breakpoint-tablet (min-width: 40rem);
+@custom-media --breakpoint-mobile (max-width: 30rem);
